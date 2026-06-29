@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Trailing Stop Bot</title>
+<style>
+  :root {
+    --bg: #080c14;
+    --card: #0f1623;
+    --border: #1a2438;
+    --border2: #243048;
+    --text: #e8edf5;
+    --muted: #4a5568;
+    --accent: #2563eb;
+    --green: #10b981;
+    --red: #ef4444;
+    --yellow: #f59e0b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 32px 16px;
+  }
+
+  .wrap { width: 100%; max-width: 620px; }
+
+  /* ── Header ── */
+  .header { text-align: center; margin-bottom: 32px; }
+  .logo { font-size: 36px; margin-bottom: 8px; }
+  .header h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }
+  .header p { color: var(--muted); font-size: 14px; margin-top: 6px; }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    margin-bottom: 16px;
+  }
+
+  .card-title {
+    font-size: 13px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 1px;
+    color: var(--muted); margin-bottom: 20px;
+  }
+
+  /* ── Mode toggle ── */
+  .toggle {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 8px; margin-bottom: 20px;
+  }
+  .toggle-btn {
+    padding: 11px; border-radius: 12px;
+    border: 1px solid var(--border2);
+    background: transparent; color: var(--muted);
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    transition: all .2s;
+  }
+  .toggle-btn.on-paper { background: #1e3a8a30; border-color: var(--accent); color: #60a5fa; }
+  .toggle-btn.on-live  { background: #7f1d1d30; border-color: var(--red);    color: #fca5a5; }
+
+  /* ── Alert ── */
+  .alert {
+    border-radius: 12px; padding: 11px 14px;
+    font-size: 13px; margin-bottom: 16px;
+  }
+  .alert-warn { background: #451a0320; border: 1px solid #92400e; color: #fbbf24; }
+  .alert-err  { background: #7f1d1d20; border: 1px solid var(--red); color: #fca5a5; }
+  .hidden { display: none !important; }
+
+  /* ── Form ── */
+  .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 22px; }
+  .field label {
+    display: block; font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .6px;
+    color: var(--muted); margin-bottom: 7px;
+  }
+  .field input {
+    width: 100%; background: #080c14;
+    border: 1px solid var(--border2);
+    border-radius: 11px; padding: 12px 14px;
+    color: var(--text); font-size: 15px; outline: none;
+    transition: border-color .2s;
+  }
+  .field input:focus { border-color: var(--accent); }
+  .field.span2 { grid-column: span 2; }
+
+  /* ── Primary btn ── */
+  .btn {
+    width: 100%; padding: 15px;
+    background: var(--accent); color: #fff;
+    border: none; border-radius: 13px;
+    font-size: 16px; font-weight: 700;
+    cursor: pointer; transition: all .2s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .btn:hover:not(:disabled) { background: #1d4ed8; transform: translateY(-1px); }
+  .btn:active:not(:disabled) { transform: translateY(0); }
+  .btn:disabled { background: #1e293b; color: #475569; cursor: not-allowed; }
+  .btn-danger {
+    background: transparent; border: 1px solid var(--red);
+    color: var(--red); border-radius: 10px;
+    padding: 8px 16px; font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all .2s;
+  }
+  .btn-danger:hover { background: #7f1d1d30; }
+
+  /* ── Dashboard ── */
+  .dash-top {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 24px;
+  }
+  .dash-left { display: flex; align-items: center; gap: 10px; }
+  .ticker { font-size: 28px; font-weight: 800; letter-spacing: -1px; }
+  .badge {
+    padding: 4px 10px; border-radius: 99px;
+    font-size: 10px; font-weight: 700; letter-spacing: .8px;
+    text-transform: uppercase;
+  }
+  .badge-paper { background: #1e3a8a30; border: 1px solid #3b82f6; color: #60a5fa; }
+  .badge-live  { background: #7f1d1d30; border: 1px solid var(--red); color: #fca5a5; }
+
+  /* Stats */
+  .stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 20px; }
+  .stat {
+    background: #080c14; border: 1px solid var(--border2);
+    border-radius: 14px; padding: 14px 12px;
+  }
+  .stat.danger { border-color: #7f1d1d; background: #1a0808; }
+  .stat-lbl { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); margin-bottom: 6px; }
+  .stat-val { font-size: 21px; font-weight: 700; }
+  .up   { color: var(--green); }
+  .down { color: var(--red); }
+  .neutral { color: var(--text); }
+
+  /* Trail bar */
+  .trail-section { margin-bottom: 20px; }
+  .trail-labels {
+    display: flex; justify-content: space-between;
+    font-size: 11px; color: var(--muted); margin-bottom: 8px;
+  }
+  .trail-labels span { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .trail-labels b { color: var(--text); font-size: 13px; }
+  .bar-wrap {
+    position: relative; height: 8px;
+    background: var(--border); border-radius: 99px; overflow: visible;
+  }
+  .bar-fill {
+    height: 100%; border-radius: 99px;
+    background: linear-gradient(90deg, var(--red) 0%, var(--yellow) 50%, var(--green) 100%);
+    transition: width .6s ease;
+  }
+  .bar-dot {
+    position: absolute; top: 50%; width: 16px; height: 16px;
+    background: #fff; border-radius: 50%; border: 3px solid var(--bg);
+    transform: translate(-50%, -50%); transition: left .6s ease;
+    box-shadow: 0 0 0 2px var(--accent);
+  }
+
+  /* Log */
+  .log-box {
+    background: #050810; border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px;
+    max-height: 190px; overflow-y: auto;
+  }
+  .log-hdr { font-size: 10px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .log-row { font-size: 12px; font-family: "SF Mono", Menlo, monospace; line-height: 1.8; }
+  .log-row.g { color: var(--green); }
+  .log-row.r { color: var(--red); }
+  .log-row.y { color: var(--yellow); }
+  .log-row.w { color: #94a3b8; }
+
+  /* Sold */
+  .sold-hero { text-align: center; padding: 10px 0 20px; }
+  .sold-hero .icon { font-size: 52px; }
+  .sold-hero h2 { font-size: 22px; font-weight: 700; margin-top: 10px; }
+  .sold-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 10px; margin: 18px 0 22px;
+  }
+  .sold-item { background: #080c14; border: 1px solid var(--border2); border-radius: 12px; padding: 14px; }
+  .sold-lbl { font-size: 11px; color: var(--muted); margin-bottom: 5px; }
+  .sold-val { font-size: 19px; font-weight: 700; }
+
+  /* Spinner */
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spin { display: inline-block; width: 16px; height: 16px; border: 2px solid #ffffff40; border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">📈</div>
+    <h1>Trailing Stop Bot</h1>
+    <p>Rides gains up · Locks in profits · Sells automatically on the way down</p>
+  </div>
+
+  <!-- ── SETUP CARD ── -->
+  <div class="card" id="setup">
+    <div class="card-title">Configuration</div>
+
+    <div class="toggle">
+      <button class="toggle-btn on-paper" id="btn-paper" onclick="setMode('paper')">📋 Paper Trading</button>
+      <button class="toggle-btn" id="btn-live" onclick="setMode('live')">💰 Live Trading</button>
+    </div>
+
+    <div class="alert alert-warn hidden" id="live-warn">
+      ⚠️ <strong>Live mode uses real money.</strong> Make sure your keys are correct.
+    </div>
+
+    <div class="fields">
+      <div class="field span2">
+        <label>API Key</label>
+        <input id="f-key" type="text" placeholder="PKxxxxxxxxxxxxxxxxxx" autocomplete="off"/>
+      </div>
+      <div class="field span2">
+        <label>Secret Key</label>
+        <input id="f-sec" type="password" placeholder="••••••••••••••••••••••••••••••••" autocomplete="off"/>
+      </div>
+      <div class="field">
+        <label>Stock Symbol</label>
+        <input id="f-sym" type="text" placeholder="AAPL" maxlength="6" oninput="this.value=this.value.toUpperCase()"/>
+      </div>
+      <div class="field">
+        <label>Dollar Amount ($)</label>
+        <input id="f-usd" type="number" placeholder="50" min="1" value="50"/>
+      </div>
+      <div class="field span2">
+        <label>Trailing Stop — currently <span id="pct-lbl">5</span>% below the highest price</label>
+        <input id="f-pct" type="range" min="1" max="20" step="0.5" value="5"
+               oninput="document.getElementById('pct-lbl').textContent=this.value"
+               style="width:100%;accent-color:var(--accent);cursor:pointer"/>
+      </div>
+    </div>
+
+    <button class="btn" id="buy-btn" onclick="startBot()">
+      Buy &amp; Start Trailing Stop
+    </button>
+    <div class="alert alert-err hidden" id="err-box" style="margin-top:14px"></div>
+  </div>
+
+  <!-- ── DASHBOARD ── -->
+  <div class="card hidden" id="dash">
+    <div class="dash-top">
+      <div class="dash-left">
+        <span class="ticker" id="d-sym"></span>
+        <span class="badge" id="d-badge"></span>
+      </div>
+      <button class="btn-danger" onclick="doCancel()">Cancel &amp; Sell</button>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-lbl">Current Price</div>
+        <div class="stat-val neutral" id="d-price">—</div>
+      </div>
+      <div class="stat">
+        <div class="stat-lbl">Peak Price</div>
+        <div class="stat-val neutral" id="d-peak">—</div>
+      </div>
+      <div class="stat danger">
+        <div class="stat-lbl">🔴 Sell Triggers At</div>
+        <div class="stat-val" id="d-stop" style="color:#f87171">—</div>
+      </div>
+      <div class="stat">
+        <div class="stat-lbl">Shares Held</div>
+        <div class="stat-val neutral" id="d-qty">—</div>
+      </div>
+      <div class="stat">
+        <div class="stat-lbl">Avg Buy Price</div>
+        <div class="stat-val neutral" id="d-buy">—</div>
+      </div>
+      <div class="stat">
+        <div class="stat-lbl">Unrealized P&amp;L</div>
+        <div class="stat-val" id="d-pnl">—</div>
+      </div>
+    </div>
+
+    <!-- Trail bar -->
+    <div class="trail-section">
+      <div class="trail-labels">
+        <span>Stop<b id="l-stop">—</b></span>
+        <span>Price<b id="l-price">—</b></span>
+        <span>Peak<b id="l-peak">—</b></span>
+      </div>
+      <div class="bar-wrap">
+        <div class="bar-fill" id="bar-fill" style="width:50%"></div>
+        <div class="bar-dot"  id="bar-dot"  style="left:50%"></div>
+      </div>
+    </div>
+
+    <!-- Log -->
+    <div class="log-box">
+      <div class="log-hdr">Activity Log</div>
+      <div id="log"></div>
+    </div>
+  </div>
+
+  <!-- ── SOLD CARD ── -->
+  <div class="card hidden" id="sold">
+    <div class="sold-hero">
+      <div class="icon" id="sold-icon">🏁</div>
+      <h2 id="sold-title">Position Closed</h2>
+    </div>
+    <div class="sold-grid" id="sold-grid"></div>
+    <button class="btn" onclick="resetBot()">Start New Trade</button>
+  </div>
+
+</div>
+
+<script>
+// ── State ──────────────────────────────────────────────────────────────────
+const S = {
+  mode: "paper",
+  key: "", secret: "", symbol: "",
+  dollars: 50, trailPct: 5,
+  qty: 0, buyPrice: 0, peakPrice: 0,
+  trailOrderId: null, pollTimer: null,
+};
+
+// ── Mode toggle ────────────────────────────────────────────────────────────
+function setMode(m) {
+  S.mode = m;
+  document.getElementById("btn-paper").className =
+    "toggle-btn" + (m === "paper" ? " on-paper" : "");
+  document.getElementById("btn-live").className =
+    "toggle-btn" + (m === "live" ? " on-live" : "");
+  document.getElementById("live-warn").classList.toggle("hidden", m !== "live");
+}
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+function $id(id) { return document.getElementById(id); }
+
+function addLog(msg, cls = "w") {
+  const t = new Date().toLocaleTimeString();
+  const div = document.createElement("div");
+  div.className = "log-row " + cls;
+  div.textContent = `[${t}]  ${msg}`;
+  $id("log").prepend(div);
+}
+
+function showErr(msg) {
+  const el = $id("err-box");
+  el.textContent = "⚠️  " + msg;
+  el.classList.remove("hidden");
+}
+function clearErr() { $id("err-box").classList.add("hidden"); }
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// ── Alpaca API ─────────────────────────────────────────────────────────────
+function baseURL() {
+  return S.mode === "paper"
+    ? "https://paper-api.alpaca.markets"
+    : "https://api.alpaca.markets";
+}
+
+async function api(method, path, body) {
+  const res = await fetch(baseURL() + path, {
+    method,
+    headers: {
+      "APCA-API-KEY-ID": S.key,
+      "APCA-API-SECRET-KEY": S.secret,
+      "Content-Type": "application/json",
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  return res.json();
+}
+
+async function getLatestPrice(sym) {
+  const res = await fetch(
+    `https://data.alpaca.markets/v2/stocks/${sym}/trades/latest?feed=iex`,
+    {
+      headers: {
+        "APCA-API-KEY-ID": S.key,
+        "APCA-API-SECRET-KEY": S.secret,
+      },
+    }
+  );
+  const data = await res.json();
+  return data?.trade?.p ?? null;
+}
+
+// ── Start bot ──────────────────────────────────────────────────────────────
+async function startBot() {
+  clearErr();
+  S.key     = $id("f-key").value.trim();
+  S.secret  = $id("f-sec").value.trim();
+  S.symbol  = $id("f-sym").value.trim().toUpperCase();
+  S.dollars = parseFloat($id("f-usd").value);
+  S.trailPct = parseFloat($id("f-pct").value);
+
+  if (!S.key || !S.secret) return showErr("Enter your API Key and Secret Key.");
+  if (!S.symbol)           return showErr("Enter a stock symbol (e.g. AAPL).");
+  if (!S.dollars || S.dollars < 1) return showErr("Enter a valid dollar amount.");
+
+  const btn = $id("buy-btn");
+  const setBtn = (txt) => { btn.innerHTML = `<span class='spin'></span> ${txt}`; btn.disabled = true; };
+
+  setBtn("Connecting to Alpaca…");
+
+  try {
+    // 1. Verify keys
+    const acct = await api("GET", "/v2/account");
+    if (!acct.id) throw new Error(acct.message || "Invalid API keys — check and try again.");
+    addLog(`Account verified ✓ (${S.mode} mode)`, "g");
+
+    // 2. Get price
+    setBtn("Getting price…");
+    const price = await getLatestPrice(S.symbol);
+    if (!price) throw new Error(`Couldn't get price for ${S.symbol}. Check the symbol.`);
+
+    const qty = Math.floor(S.dollars / price);
+    if (qty < 1) throw new Error(
+      `$${S.dollars} can't buy 1 share of ${S.symbol} at $${price.toFixed(2)}. ` +
+      `Need at least $${Math.ceil(price)}.`
+    );
+
+    addLog(`${S.symbol} last price: $${price.toFixed(2)} — buying ${qty} share${qty>1?"s":""}`, "y");
+
+    // 3. Market buy
+    setBtn("Placing buy order…");
+    const buyOrd = await api("POST", "/v2/orders", {
+      symbol: S.symbol, qty,
+      side: "buy", type: "market", time_in_force: "day",
+    });
+    if (!buyOrd.id) throw new Error(buyOrd.message || "Buy order failed.");
+    addLog(`Market buy submitted (order: ${buyOrd.id.slice(0,8)}…)`, "y");
+
+    // 4. Wait for fill
+    setBtn("Waiting for fill…");
+    const filled = await waitForFill(buyOrd.id);
+    const fillPrice = parseFloat(filled.filled_avg_price);
+    addLog(`Filled at $${fillPrice.toFixed(2)} × ${qty} shares`, "g");
+
+    // 5. Trailing stop
+    setBtn("Placing trailing stop…");
+    const stopOrd = await api("POST", "/v2/orders", {
+      symbol: S.symbol, qty,
+      side: "sell", type: "trailing_stop",
+      trail_percent: S.trailPct, time_in_force: "gtc",
+    });
+    if (!stopOrd.id) throw new Error(stopOrd.message || "Trailing stop order failed.");
+
+    const stopAt = (fillPrice * (1 - S.trailPct/100)).toFixed(2);
+    addLog(`Trailing stop live — ${S.trailPct}% trail | initial stop $${stopAt}`, "g");
+
+    S.qty = qty;
+    S.buyPrice = fillPrice;
+    S.peakPrice = fillPrice;
+    S.trailOrderId = stopOrd.id;
+
+    showDashboard();
+    startPolling();
+
+  } catch (e) {
+    showErr(e.message);
+    btn.textContent = "Buy & Start Trailing Stop";
+    btn.disabled = false;
+  }
+}
+
+async function waitForFill(id, maxMs=60000) {
+  const t0 = Date.now();
+  while (Date.now() - t0 < maxMs) {
+    const o = await api("GET", `/v2/orders/${id}`);
+    if (o.status === "filled") return o;
+    if (["canceled","expired","rejected"].includes(o.status))
+      throw new Error(`Order ${o.status}.`);
+    await sleep(2000);
+  }
+  throw new Error("Order not filled in 60s — market may be closed.");
+}
+
+// ── Dashboard ──────────────────────────────────────────────────────────────
+function showDashboard() {
+  $id("setup").classList.add("hidden");
+  $id("dash").classList.remove("hidden");
+  $id("d-sym").textContent = S.symbol;
+  const b = $id("d-badge");
+  b.textContent = S.mode.toUpperCase();
+  b.className = "badge badge-" + S.mode;
+  $id("d-qty").textContent = S.qty;
+  $id("d-buy").textContent = "$" + S.buyPrice.toFixed(2);
+}
+
+function startPolling() {
+  poll();
+  S.pollTimer = setInterval(poll, 15000);
+}
+
+async function poll() {
+  try {
+    // Check if trailing stop already fired
+    const ord = await api("GET", `/v2/orders/${S.trailOrderId}`);
+    if (ord.status === "filled") {
+      clearInterval(S.pollTimer);
+      showSold(parseFloat(ord.filled_avg_price), "auto");
+      return;
+    }
+
+    const price = await getLatestPrice(S.symbol);
+    if (!price) return;
+
+    if (price > S.peakPrice) S.peakPrice = price;
+    const stop = parseFloat((S.peakPrice * (1 - S.trailPct/100)).toFixed(2));
+    const pnl  = (price - S.buyPrice) * S.qty;
+    const pnlStr = (pnl>=0?"+":"") + "$" + pnl.toFixed(2);
+
+    $id("d-price").textContent = "$" + price.toFixed(2);
+    $id("d-peak").textContent  = "$" + S.peakPrice.toFixed(2);
+    $id("d-stop").textContent  = "$" + stop.toFixed(2);
+    const pnlEl = $id("d-pnl");
+    pnlEl.textContent = pnlStr;
+    pnlEl.className   = "stat-val " + (pnl>=0 ? "up" : "down");
+
+    // Trail bar
+    const range = S.peakPrice - stop;
+    const pct = range > 0 ? Math.min(99, Math.max(2, ((price - stop) / range) * 100)) : 50;
+    $id("bar-fill").style.width = pct + "%";
+    $id("bar-dot").style.left   = pct + "%";
+    $id("l-stop").textContent   = "$" + stop.toFixed(2);
+    $id("l-price").textContent  = "$" + price.toFixed(2);
+    $id("l-peak").textContent   = "$" + S.peakPrice.toFixed(2);
+
+    addLog(`${S.symbol}  $${price.toFixed(2)}  |  stop $${stop.toFixed(2)}  |  P&L ${pnlStr}`);
+  } catch(e) {
+    addLog("Poll error: " + e.message, "r");
+  }
+}
+
+// ── Cancel ─────────────────────────────────────────────────────────────────
+async function doCancel() {
+  if (!confirm("Cancel the trailing stop and immediately sell your position?")) return;
+  clearInterval(S.pollTimer);
+  addLog("Cancelling trailing stop…", "y");
+  try {
+    await api("DELETE", `/v2/orders/${S.trailOrderId}`);
+    const o = await api("POST", "/v2/orders", {
+      symbol: S.symbol, qty: S.qty,
+      side: "sell", type: "market", time_in_force: "day",
+    });
+    const filled = await waitForFill(o.id);
+    showSold(parseFloat(filled.filled_avg_price), "manual");
+  } catch(e) {
+    addLog("Cancel error: " + e.message, "r");
+  }
+}
+
+// ── Sold card ──────────────────────────────────────────────────────────────
+function showSold(sellPrice, reason) {
+  clearInterval(S.pollTimer);
+  $id("dash").classList.add("hidden");
+  $id("sold").classList.remove("hidden");
+
+  const pnl    = (sellPrice - S.buyPrice) * S.qty;
+  const pnlPct = ((sellPrice - S.buyPrice) / S.buyPrice * 100).toFixed(2);
+  const win    = pnl >= 0;
+
+  $id("sold-icon").textContent  = win ? "🟢" : "🔴";
+  $id("sold-title").textContent = reason === "auto"
+    ? (win ? "Trailing Stop Triggered — Profit Locked!" : "Trailing Stop Triggered")
+    : "Position Closed Manually";
+
+  $id("sold-grid").innerHTML = `
+    <div class="sold-item"><div class="sold-lbl">Symbol</div><div class="sold-val">${S.symbol}</div></div>
+    <div class="sold-item"><div class="sold-lbl">Shares</div><div class="sold-val">${S.qty}</div></div>
+    <div class="sold-item"><div class="sold-lbl">Buy Price</div><div class="sold-val">$${S.buyPrice.toFixed(2)}</div></div>
+    <div class="sold-item"><div class="sold-lbl">Sell Price</div><div class="sold-val">$${sellPrice.toFixed(2)}</div></div>
+    <div class="sold-item"><div class="sold-lbl">Net P&L</div><div class="sold-val" style="color:${win?'var(--green)':'var(--red)'}">${win?"+":""}$${pnl.toFixed(2)}</div></div>
+    <div class="sold-item"><div class="sold-lbl">Return</div><div class="sold-val" style="color:${win?'var(--green)':'var(--red)'}">${win?"+":""}${pnlPct}%</div></div>
+  `;
+
+  addLog(`SOLD ${S.qty}×${S.symbol} @ $${sellPrice.toFixed(2)} | P&L ${win?"+":""}$${pnl.toFixed(2)} (${win?"+":""}${pnlPct}%)`, win?"g":"r");
+}
+
+// ── Reset ──────────────────────────────────────────────────────────────────
+function resetBot() {
+  $id("sold").classList.add("hidden");
+  $id("setup").classList.remove("hidden");
+  const btn = $id("buy-btn");
+  btn.disabled = false;
+  btn.textContent = "Buy & Start Trailing Stop";
+  $id("log").innerHTML = "";
+  clearErr();
+  S.trailOrderId = null;
+}
+</script>
+</body>
+</html>
