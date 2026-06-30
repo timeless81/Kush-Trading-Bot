@@ -196,7 +196,7 @@ input:focus,select:focus{border-color:var(--blue);}select option{background:#0d1
       </div>
       <div class="row c2">
         <div><label>Qty (shares)</label><input id="t-qty" type="number" placeholder="0" min="1"/></div>
-        <div><label>OR Dollar ($)</label><input id="t-usd" type="number" placeholder="50"/></div>
+        <div><label>OR Shares</label><input id="t-usd" type="number" placeholder="1" min="1"/></div>
       </div>
       <div id="lim-row" class="row c1 hidden"><div><label>Limit Price</label><input id="t-lim" type="number" step="0.01" placeholder="0.00"/></div></div>
       <div id="trl-row" class="row c1 hidden"><div><label>Trail %</label><input id="t-trl" type="number" value="5" min="0.1" step="0.1"/></div></div>
@@ -221,17 +221,17 @@ input:focus,select:focus{border-color:var(--blue);}select option{background:#0d1
     <div class="strat-card selected" id="sc-trail"    onclick="pickStrat('trail')">
       <div class="strat-icon">📈</div>
       <div class="strat-name">Trailing Stop</div>
-      <div class="strat-desc">Buy now · Trail 5% below peak · Auto-sell on dip</div>
+      <div class="strat-desc">Enter shares · Trail 5% below peak · Auto-sell on dip</div>
     </div>
     <div class="strat-card" id="sc-bracket"  onclick="pickStrat('bracket')">
       <div class="strat-icon">🎯</div>
       <div class="strat-name">Bracket</div>
-      <div class="strat-desc">Buy now · Set take-profit & stop-loss targets</div>
+      <div class="strat-desc">Enter shares · Set take-profit & stop-loss targets</div>
     </div>
     <div class="strat-card" id="sc-dca"      onclick="pickStrat('dca')">
       <div class="strat-icon">🔄</div>
       <div class="strat-name">DCA</div>
-      <div class="strat-desc">Buy fixed $ amount every N minutes regardless of price</div>
+      <div class="strat-desc">Buy N shares every X minutes regardless of price</div>
     </div>
     <div class="strat-card" id="sc-dip"      onclick="pickStrat('dip')">
       <div class="strat-icon">📉</div>
@@ -263,7 +263,7 @@ input:focus,select:focus{border-color:var(--blue);}select option{background:#0d1
       <!-- Common fields -->
       <div class="row c2">
         <div><label>Symbol</label><input id="a-sym" placeholder="AAPL" oninput="this.value=this.value.toUpperCase()"/></div>
-        <div><label>Dollar Amount ($)</label><input id="a-usd" type="number" value="50"/></div>
+        <div><label>Number of Shares</label><input id="a-usd" type="number" value="1" min="1"/></div>
       </div>
       <div class="row c2">
         <div><label>Check Every (min)</label><input id="a-int" type="number" value="1" min="1"/></div>
@@ -293,7 +293,7 @@ input:focus,select:focus{border-color:var(--blue);}select option{background:#0d1
       <!-- DCA -->
       <div id="cfg-dca" class="hidden">
         <div class="alert a-info" style="margin-top:0">
-          <b>When it buys:</b> Every <span id="lbl-dca-int">1</span> min regardless of price.<br>
+          <b>When it buys:</b> <span id="lbl-dca-shares">1</span> share(s) every <span id="lbl-dca-int">1</span> min regardless of price.<br>
           <b>Tip:</b> Great for long-term accumulation.
         </div>
       </div>
@@ -438,7 +438,7 @@ const G={
   key:"",secret:"",endpoint:"https://paper-api.alpaca.markets",ok:false,
   side:"buy",type:"market",
   strat:"trail",
-  E:{on:false,timer:null,sym:"",usd:50,trail:5,tp:10,sl:5,interval:1,
+  E:{on:false,timer:null,sym:"",shares:1,trail:5,tp:10,sl:5,interval:1,
      dipPct:3,dipLB:20,boPct:2,boLB:20,
      rsiPeriod:14,rsiBuy:30,rsiSell:70,
      maFast:9,maSlow:21,
@@ -551,13 +551,12 @@ async function fetchQ(){
 async function placeOrder(){
   $("t-err").classList.add("hidden");$("t-ok").classList.add("hidden");
   const sym=$("t-sym").value.trim().toUpperCase();
-  const qty=parseInt($("t-qty").value)||0,usd=parseFloat($("t-usd").value)||0;
+  const qty=parseInt($("t-qty").value)||0,extraShares=parseInt($("t-usd").value)||0;
   if(!G.ok)return showErr("t-err","Not connected.");
   if(!sym)return showErr("t-err","Enter a symbol.");
-  if(!qty&&!usd)return showErr("t-err","Enter qty or dollar amount.");
+  const q=qty||extraShares;
+  if(!q||q<1)return showErr("t-err","Enter number of shares.");
   const btn=$("trade-btn");btn.innerHTML="<span class='spin'></span> Placing…";btn.disabled=true;
-  let q=qty;
-  if(!q){const p=await getPrice(sym);if(!p){btn.textContent="Place Order";btn.disabled=false;return showErr("t-err","Can't get price for "+sym);}q=Math.floor(usd/p);if(q<1){btn.textContent="Place Order";btn.disabled=false;return showErr("t-err",`$${usd} can't buy 1 share at ${fmt(p)}`);}}
   const body={symbol:sym,qty:q,side:G.side,type:G.type,time_in_force:$("t-tif").value};
   if(G.type==="limit")body.limit_price=parseFloat($("t-lim").value);
   if(G.type==="trailing_stop")body.trail_percent=parseFloat($("t-trl").value)||5;
@@ -605,6 +604,7 @@ function pickStrat(s){
 
 // Live label updaters
 $("a-trail").addEventListener("input",()=>$("lbl-trail").textContent=$("a-trail").value||5);
+$("a-usd").addEventListener("input",()=>{if($("lbl-dca-shares"))$("lbl-dca-shares").textContent=$("a-usd").value||1;});
 $("a-int").addEventListener("input",()=>$("lbl-dca-int").textContent=$("a-int").value||1);
 $("a-rsi-buy").addEventListener("input",()=>$("lbl-rsi-buy").textContent=$("a-rsi-buy").value);
 $("a-rsi-sell").addEventListener("input",()=>$("lbl-rsi-sell").textContent=$("a-rsi-sell").value);
@@ -623,7 +623,7 @@ async function startEng(){
   if(!sym){showErr("eng-err","Enter a symbol.");return;}
   const E=G.E;
   E.on=true;E.sym=sym;
-  E.usd=parseFloat($("a-usd").value)||50;
+  E.shares=parseInt($("a-usd").value)||1;
   E.interval=parseFloat($("a-int").value)||1;
   E.trail=parseFloat($("a-trail").value)||5;
   E.tp=parseFloat($("a-tp").value)||10;
@@ -641,7 +641,7 @@ async function startEng(){
   $("eng-start").classList.add("hidden");$("eng-stop").classList.remove("hidden");
   $("e-status").innerHTML='<span class="badge bg">RUNNING</span>';
   $("e-sym").textContent=sym;$("e-strat").textContent=stratNames[G.strat];
-  eLog(`Engine started — ${sym} | ${stratNames[G.strat]} | $${E.usd}`,"g");
+  eLog(`Engine started — ${sym} | ${stratNames[G.strat]} | ${E.shares} share(s)`,"g");
   tick();
 }
 
@@ -669,15 +669,15 @@ async function tick(){
 }
 
 // ── Shared helpers ─────────────────────────────────────────────────────────
-async function doBuy(sym,usd){
+async function doBuy(sym,shares){
   const p=await getPrice(sym);if(!p)throw new Error("No price data");
-  const q=Math.floor(usd/p);if(q<1)throw new Error(`$${usd} can't buy 1 share at ${fmt(p)}`);
-  const r=await api("POST","/v2/orders",{symbol:sym,qty:q,side:"buy",type:"market",time_in_force:"day"});
+  if(shares<1)throw new Error("Shares must be at least 1");
+  const r=await api("POST","/v2/orders",{symbol:sym,qty:shares,side:"buy",type:"market",time_in_force:"day"});
   if(!r.ok)throw new Error("Buy failed: "+(r.d.message||""));
-  eLog(`BUY ${q}×${sym} @ ~${fmt(p)}`,"g");
+  eLog(`BUY ${shares}×${sym} @ ~${fmt(p)}`,"g");
   await sleep(3000);
   const filled=(await api("GET","/v2/orders/"+r.d.id)).d;
-  return{qty:q,fillPrice:parseFloat(filled.filled_avg_price||p)};
+  return{qty:shares,fillPrice:parseFloat(filled.filled_avg_price||p)};
 }
 
 async function attachTrailStop(sym,qty,trailPct){
@@ -723,7 +723,7 @@ async function tickTrail(){
   const p=await getPrice(E.sym);if(!p){eLog("No price","r");return;}
   if(!E.qty){
     eSig("Buying now…","var(--yellow)");
-    const{qty,fillPrice}=await doBuy(E.sym,E.usd);
+    const{qty,fillPrice}=await doBuy(E.sym,E.shares);
     E.qty=qty;E.buy=fillPrice;E.peak=fillPrice;
     E.stopId=await attachTrailStop(E.sym,qty,E.trail);
     eLog(`Trail stop set at ${fmt(fillPrice*(1-E.trail/100))}`,"g");
@@ -742,7 +742,7 @@ async function tickBracket(){
   }
   eSig("Buying now…","var(--yellow)");
   const p=await getPrice(E.sym);if(!p)return;
-  const q=Math.floor(E.usd/p);if(q<1){eLog(`$${E.usd} insufficient`,"r");return;}
+  const q=E.shares;if(q<1){eLog("Shares must be at least 1","r");return;}
   const tp=(p*(1+E.tp/100)).toFixed(2),sl=(p*(1-E.sl/100)).toFixed(2);
   const r=await api("POST","/v2/orders",{symbol:E.sym,qty:q,side:"buy",type:"market",time_in_force:"day",order_class:"bracket",take_profit:{limit_price:tp},stop_loss:{stop_price:sl}});
   if(!r.ok){eLog("Bracket failed: "+(r.d.message||""),"r");return;}
@@ -757,7 +757,7 @@ async function tickDCA(){
   const E=G.E;
   eSig("Buying now (DCA)…","var(--yellow)");
   const p=await getPrice(E.sym);if(!p)return;
-  const q=Math.floor(E.usd/p);if(q<1){eLog(`$${E.usd} insufficient`,"r");return;}
+  const q=E.shares;if(q<1){eLog("Shares must be at least 1","r");return;}
   const r=await api("POST","/v2/orders",{symbol:E.sym,qty:q,side:"buy",type:"market",time_in_force:"day"});
   if(!r.ok){eLog("DCA failed: "+(r.d.message||""),"r");return;}
   E.qty+=q;$("e-pos").textContent=`${E.qty}×${E.sym}`;
@@ -784,7 +784,7 @@ async function tickDip(){
   eLog(`${E.sym} high=${fmt(high)} now=${fmt(current)} drop=${dropPct.toFixed(2)}% (need ${E.dipPct}%)`);
   if(dropPct>=E.dipPct){
     eLog(`🎯 Dip triggered! ${dropPct.toFixed(2)}% drop from high ${fmt(high)}`,"g");
-    const{qty,fillPrice}=await doBuy(E.sym,E.usd);
+    const{qty,fillPrice}=await doBuy(E.sym,E.shares);
     E.qty=qty;E.buy=fillPrice;E.peak=fillPrice;
     E.stopId=await attachTrailStop(E.sym,qty,E.trail);
     eLog(`Trail stop set at ${fmt(fillPrice*(1-E.trail/100))}`,"g");
@@ -810,7 +810,7 @@ async function tickBreakout(){
   eLog(`${E.sym} low=${fmt(low)} now=${fmt(current)} rise=${risePct.toFixed(2)}% (need ${E.boPct}%)`);
   if(risePct>=E.boPct){
     eLog(`🚀 Breakout triggered! ${risePct.toFixed(2)}% above low ${fmt(low)}`,"g");
-    const{qty,fillPrice}=await doBuy(E.sym,E.usd);
+    const{qty,fillPrice}=await doBuy(E.sym,E.shares);
     E.qty=qty;E.buy=fillPrice;E.peak=fillPrice;
     E.stopId=await attachTrailStop(E.sym,qty,E.trail);
     eLog(`Trail stop set at ${fmt(fillPrice*(1-E.trail/100))}`,"g");
@@ -853,7 +853,7 @@ async function tickRSI(){
     eLog(`RSI=${rsi.toFixed(1)} | waiting to buy below ${E.rsiBuy}`);
     if(rsi<E.rsiBuy){
       eLog(`📊 RSI oversold (${rsi.toFixed(1)}) — BUYING`,"g");
-      const{qty,fillPrice}=await doBuy(E.sym,E.usd);
+      const{qty,fillPrice}=await doBuy(E.sym,E.shares);
       E.qty=qty;E.buy=fillPrice;E.peak=fillPrice;
       E.stopId=await attachTrailStop(E.sym,qty,E.trail);
     }
@@ -910,7 +910,7 @@ async function tickMA(){
     eLog(`MA${E.maFast}=${fmt(fastMA)} MA${E.maSlow}=${fmt(slowMA)} — ${cross}`);
     if(goldenCross){
       eLog(`〰️ Golden Cross! MA${E.maFast} crossed above MA${E.maSlow} — BUYING`,"g");
-      const{qty,fillPrice}=await doBuy(E.sym,E.usd);
+      const{qty,fillPrice}=await doBuy(E.sym,E.shares);
       E.qty=qty;E.buy=fillPrice;E.peak=fillPrice;
       E.stopId=await attachTrailStop(E.sym,qty,E.trail);
     }
