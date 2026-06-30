@@ -1,0 +1,5 @@
+# SECRET — never push to GitHub
+.env
+
+# Mac junk
+.DS_Store

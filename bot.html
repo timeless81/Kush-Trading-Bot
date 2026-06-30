@@ -433,6 +433,29 @@ input:focus,select:focus{border-color:var(--blue);}select option{background:#0d1
 </div><!-- /layout -->
 
 <script>
+// ── Auto-load credentials from .env via server ─────────────────────────────
+async function loadEnvConfig(){
+  try{
+    const r=await fetch("/api/config");
+    if(!r.ok)return;
+    const cfg=await r.json();
+    if(cfg.key && cfg.key!=="YOUR_API_KEY_HERE"){
+      $("c-key").value=cfg.key;
+      $("c-sec").value=cfg.secret;
+      $("c-ep").value=cfg.endpoint||"https://paper-api.alpaca.markets";
+      // Set the toggle to match endpoint
+      if(cfg.endpoint&&cfg.endpoint.includes("paper")) setEp("paper");
+      else if(cfg.endpoint&&!cfg.endpoint.includes("paper")) setEp("live");
+      // Show a subtle loaded indicator
+      const ok=$("conn-ok");
+      ok.textContent="✅ Credentials loaded from .env — click Connect";
+      ok.classList.remove("hidden");
+      setTimeout(()=>ok.classList.add("hidden"),4000);
+    }
+  }catch(e){}
+}
+window.addEventListener("DOMContentLoaded", loadEnvConfig);
+
 // ── State ──────────────────────────────────────────────────────────────────
 const G={
   key:"",secret:"",endpoint:"https://paper-api.alpaca.markets",ok:false,
