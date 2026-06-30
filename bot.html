@@ -93,6 +93,28 @@ input:focus,select:focus{border-color:var(--blue);}select option{background:#0d1
 </style>
 </head>
 <body>
+
+<!-- ══ LOGIN SCREEN ══ -->
+<div id="login-screen" style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--bg);">
+  <div style="width:100%;max-width:360px;padding:16px;">
+    <div style="text-align:center;margin-bottom:32px;">
+      <div style="font-size:40px;margin-bottom:10px;">📈</div>
+      <h1 style="font-size:22px;font-weight:700;">KushBot</h1>
+      <p style="font-size:13px;color:var(--muted2);margin-top:6px;">Enter your password to continue</p>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;">
+      <div style="margin-bottom:16px;">
+        <label>Password</label>
+        <input id="pw-input" type="password" placeholder="••••••••••••" onkeydown="if(event.key==='Enter')doLogin()" autofocus style="font-size:16px;"/>
+      </div>
+      <button class="btn btn-blue btn-full" id="pw-btn" onclick="doLogin()">Unlock Bot</button>
+      <div class="alert a-err hidden" id="pw-err" style="margin-top:10px;text-align:center;"></div>
+    </div>
+    <p style="text-align:center;font-size:11px;color:var(--muted);margin-top:16px;">Password set in your local .env file</p>
+  </div>
+</div>
+
+<div id="main-app" style="display:none;">
 <div class="layout">
 
 <!-- SIDEBAR -->
@@ -109,9 +131,12 @@ input:focus,select:focus{border-color:var(--blue);}select option{background:#0d1
     <a id="nav-positions" onclick="nav('positions')">💼  Positions</a>
     <a id="nav-orders"    onclick="nav('orders')">📋  Orders</a>
   </nav>
-  <div class="sb-status">
-    <div class="dot" id="sb-dot"></div>
-    <span id="sb-txt">Not connected</span>
+  <div class="sb-status" style="flex-direction:column;align-items:flex-start;gap:10px;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div class="dot" id="sb-dot"></div>
+      <span id="sb-txt">Not connected</span>
+    </div>
+    <button onclick="doLogout()" style="font-size:11px;padding:5px 10px;border-radius:6px;border:1px solid var(--border2);background:transparent;color:var(--muted2);cursor:pointer;">🔒 Lock Bot</button>
   </div>
 </div>
 
@@ -431,8 +456,46 @@ input:focus,select:focus{border-color:var(--blue);}select option{background:#0d1
 
 </div><!-- /main -->
 </div><!-- /layout -->
+</div><!-- /main-app -->
 
 <script>
+// ── Login / Logout ─────────────────────────────────────────────────────────
+async function doLogin(){
+  const pw=$("pw-input").value;
+  const err=$("pw-err"); err.classList.add("hidden");
+  if(!pw){err.textContent="Enter your password.";err.classList.remove("hidden");return;}
+  const btn=$("pw-btn"); btn.innerHTML="<span class='spin'></span> Checking…"; btn.disabled=true;
+  try{
+    const r=await fetch("/api/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:pw})});
+    const d=await r.json();
+    if(d.ok){
+      $("login-screen").style.display="none";
+      $("main-app").style.display="block";
+      loadEnvConfig();
+    } else {
+      err.textContent="❌ Wrong password. Try again.";
+      err.classList.remove("hidden");
+      $("pw-input").value="";
+      $("pw-input").focus();
+    }
+  } catch(e){
+    err.textContent="Server not reachable. Make sure server.py is running.";
+    err.classList.remove("hidden");
+  }
+  btn.textContent="Unlock Bot"; btn.disabled=false;
+}
+
+async function doLogout(){
+  await fetch("/api/logout",{method:"POST"});
+  $("main-app").style.display="none";
+  $("login-screen").style.display="flex";
+  $("pw-input").value="";
+  $("pw-input").focus();
+  G.ok=false;
+  $("sb-dot").classList.remove("on");
+  $("sb-txt").textContent="Not connected";
+}
+
 // ── Auto-load credentials from .env via server ─────────────────────────────
 async function loadEnvConfig(){
   try{
@@ -454,7 +517,24 @@ async function loadEnvConfig(){
     }
   }catch(e){}
 }
-window.addEventListener("DOMContentLoaded", loadEnvConfig);
+window.addEventListener("DOMContentLoaded", async ()=>{
+  // Check if already logged in (valid session cookie)
+  try{
+    const r=await fetch("/api/check");
+    const d=await r.json();
+    if(d.authenticated){
+      $("login-screen").style.display="none";
+      $("main-app").style.display="block";
+      loadEnvConfig();
+    }
+    // else: login screen stays visible (default)
+  }catch(e){
+    // Server not running — show a helpful message
+    $("pw-err").textContent="⚠️ Server not running. Double-click START BOT.command first.";
+    $("pw-err").classList.remove("hidden");
+    $("pw-btn").disabled=true;
+  }
+});
 
 // ── State ──────────────────────────────────────────────────────────────────
 const G={
