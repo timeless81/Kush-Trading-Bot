@@ -379,15 +379,16 @@ function nav(p){
 // ── API ────────────────────────────────────────────────────────────────────
 async function api(method,path,body){
   try{
+    const headers={"APCA-API-KEY-ID":G.key,"APCA-API-SECRET-KEY":G.secret};
+    if(body) headers["Content-Type"]="application/json";
     const r=await fetch(G.endpoint+path,{
-      method,
-      headers:{"APCA-API-KEY-ID":G.key,"APCA-API-SECRET-KEY":G.secret,"Content-Type":"application/json"},
+      method, headers,
       body:body?JSON.stringify(body):undefined
     });
     const txt=await r.text();
     try{return{ok:r.ok,s:r.status,d:JSON.parse(txt)};}
     catch{return{ok:false,s:r.status,d:{message:txt}};}
-  }catch(e){return{ok:false,s:0,d:{message:e.message}};}
+  }catch(e){return{ok:false,s:0,d:{message:"Network error — make sure you're opening the bot from http://localhost:8080/bot.html (not from file://). Run start.command to fix this."}};}
 }
 
 async function price(sym){
