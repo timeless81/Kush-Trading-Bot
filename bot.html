@@ -5,24 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Kush Trading Bot</title>
 <style>
-:root {
-  --bg:      #07090f;
-  --card:    #0d1117;
-  --border:  #1c2333;
-  --border2: #243048;
-  --text:    #e6edf3;
-  --muted:   #4a5568;
-  --muted2:  #7d8590;
-  --blue:    #1f6feb;
-  --green:   #3fb950;
-  --red:     #f85149;
-  --yellow:  #d29922;
-}
+:root{--bg:#07090f;--card:#0d1117;--border:#1c2333;--border2:#243048;--text:#e6edf3;--muted:#4a5568;--muted2:#7d8590;--blue:#1f6feb;--green:#3fb950;--red:#f85149;--yellow:#d29922;--purple:#8b5cf6;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh;}
-.layout{display:grid;grid-template-columns:220px 1fr;min-height:100vh;}
-
-/* Sidebar */
+.layout{display:grid;grid-template-columns:230px 1fr;min-height:100vh;}
 .sidebar{background:var(--card);border-right:1px solid var(--border);padding:20px 0;display:flex;flex-direction:column;}
 .sb-logo{padding:0 18px 20px;border-bottom:1px solid var(--border);margin-bottom:12px;}
 .sb-logo h1{font-size:17px;font-weight:700;}
@@ -30,117 +16,96 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .sb-nav a{display:flex;align-items:center;gap:10px;padding:9px 18px;font-size:13px;font-weight:500;color:var(--muted2);text-decoration:none;cursor:pointer;transition:all .15s;border-left:2px solid transparent;}
 .sb-nav a:hover{color:var(--text);background:#ffffff08;}
 .sb-nav a.active{color:var(--text);background:#ffffff0d;border-left-color:var(--blue);}
-.sb-nav .section-lbl{padding:14px 18px 4px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);}
+.sb-nav .lbl{padding:14px 18px 4px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);}
 .sb-status{margin-top:auto;padding:14px 18px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex-shrink:0;}
-.dot.on{background:var(--green);box-shadow:0 0 6px var(--green);}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex-shrink:0;transition:all .3s;}
+.dot.on{background:var(--green);box-shadow:0 0 8px var(--green);}
 .sb-status span{font-size:12px;color:var(--muted2);}
-
-/* Pages */
 .page{display:none;padding:28px 32px;}
 .page.active{display:block;}
 .page-title{font-size:20px;font-weight:700;margin-bottom:4px;}
 .page-sub{font-size:13px;color:var(--muted2);margin-bottom:24px;}
-
-/* Cards */
 .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px;}
 .card-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--muted2);margin-bottom:16px;}
-
-/* Tiles */
 .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;}
 .tile{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;}
 .tile-lbl{font-size:11px;color:var(--muted2);margin-bottom:8px;}
 .tile-val{font-size:22px;font-weight:700;}
-.tile-sub{font-size:11px;color:var(--muted2);margin-top:4px;}
-
-/* Form */
 .row{display:grid;gap:12px;margin-bottom:12px;}
-.row.c2{grid-template-columns:1fr 1fr;}
-.row.c3{grid-template-columns:1fr 1fr 1fr;}
-.row.c1{grid-template-columns:1fr;}
+.c2{grid-template-columns:1fr 1fr;}.c3{grid-template-columns:1fr 1fr 1fr;}.c1{grid-template-columns:1fr;}
 label{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--muted2);margin-bottom:6px;}
 input,select{width:100%;background:#07090f;border:1px solid var(--border2);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;transition:border-color .2s;}
-input:focus,select:focus{border-color:var(--blue);}
-select option{background:#0d1117;}
-
-/* Buttons */
+input:focus,select:focus{border-color:var(--blue);}select option{background:#0d1117;}
 .btn{padding:10px 18px;border-radius:8px;border:none;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:6px;}
-.btn-blue{background:var(--blue);color:#fff;} .btn-blue:hover{background:#388bfd;}
-.btn-green{background:#238636;color:#fff;}    .btn-green:hover{background:#2ea043;}
-.btn-red{background:#da3633;color:#fff;}      .btn-red:hover{background:#f85149;}
+.btn-blue{background:var(--blue);color:#fff;}.btn-blue:hover{background:#388bfd;}
+.btn-green{background:#238636;color:#fff;}.btn-green:hover{background:#2ea043;}
+.btn-red{background:#da3633;color:#fff;}.btn-red:hover{background:#f85149;}
 .btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--muted2);}.btn-ghost:hover{color:var(--text);}
 .btn-full{width:100%;justify-content:center;padding:12px;}
 .btn:disabled{opacity:.4;cursor:not-allowed;}
-
-/* Badges */
 .badge{padding:2px 8px;border-radius:99px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;}
-.bg{background:#238636;color:#fff;} .bb{background:var(--blue);color:#fff;}
-.br{background:#da3633;color:#fff;} .by{background:#9e6a03;color:#fff;} .bx{background:#21262d;color:var(--muted2);}
-
-/* Alerts */
-.alert{border-radius:8px;padding:10px 14px;font-size:13px;margin-top:12px;}
+.bg{background:#238636;color:#fff;}.bb{background:var(--blue);color:#fff;}.br{background:#da3633;color:#fff;}.by{background:#9e6a03;color:#fff;}.bx{background:#21262d;color:var(--muted2);}.bp{background:#6d28d9;color:#fff;}
+.alert{border-radius:8px;padding:10px 14px;font-size:13px;margin-top:10px;}
 .a-err{background:#7f1d1d20;border:1px solid #7f1d1d;color:#fca5a5;}
 .a-ok{background:#14532d20;border:1px solid #14532d;color:#86efac;}
 .a-warn{background:#78350f20;border:1px solid #78350f;color:#fcd34d;}
+.a-info{background:#1e3a8a20;border:1px solid #1e3a8a;color:#93c5fd;}
 .hidden{display:none!important;}
-
-/* Table */
 .tbl{width:100%;border-collapse:collapse;}
 .tbl th{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--muted2);padding:8px 12px;border-bottom:1px solid var(--border);text-align:left;}
 .tbl td{padding:10px 12px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:middle;}
 .tbl tr:last-child td{border-bottom:none;}
 .tbl tr:hover td{background:#ffffff04;}
 .empty{text-align:center;padding:28px!important;color:var(--muted2);}
-
-/* Log */
-.log-box{background:#04060a;border:1px solid var(--border);border-radius:8px;padding:12px;max-height:190px;overflow-y:auto;}
+.log-box{background:#04060a;border:1px solid var(--border);border-radius:8px;padding:12px;max-height:200px;overflow-y:auto;}
 .log-row{font-size:11px;font-family:"SF Mono",Menlo,monospace;line-height:1.9;color:var(--muted2);}
-.log-row.g{color:var(--green);} .log-row.r{color:var(--red);} .log-row.y{color:var(--yellow);}
-
-/* Toggle */
+.log-row.g{color:var(--green);}.log-row.r{color:var(--red);}.log-row.y{color:var(--yellow);}.log-row.p{color:#a78bfa;}
 .toggle{display:flex;background:#07090f;border:1px solid var(--border2);border-radius:8px;padding:3px;width:fit-content;margin-bottom:16px;}
-.tog{padding:6px 18px;border-radius:6px;font-size:13px;font-weight:600;color:var(--muted2);cursor:pointer;transition:all .2s;user-select:none;}
+.tog{padding:6px 16px;border-radius:6px;font-size:13px;font-weight:600;color:var(--muted2);cursor:pointer;transition:all .2s;user-select:none;}
 .tog.on{background:var(--blue);color:#fff;}
-
-/* Progress bar */
-.pbar-wrap{margin:16px 0;}
+.pbar-wrap{margin:14px 0;}
 .pbar-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--muted2);margin-bottom:6px;}
 .pbar-labels span{display:flex;flex-direction:column;align-items:center;gap:1px;}
 .pbar-labels b{color:var(--text);font-size:12px;}
 .pbar{height:6px;background:var(--border);border-radius:99px;position:relative;}
 .pbar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--red),var(--yellow),var(--green));transition:width .5s;}
 .pbar-dot{position:absolute;top:50%;width:12px;height:12px;background:#fff;border-radius:50%;border:2px solid var(--bg);transform:translate(-50%,-50%);transition:left .5s;}
-
-/* Engine rows */
 .eng-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);}
 .eng-row:last-child{border-bottom:none;}
 .eng-lbl{font-size:13px;color:var(--muted2);}
 .eng-val{font-size:13px;font-weight:600;}
-
-/* Colors */
-.up{color:var(--green)!important;} .dn{color:var(--red)!important;} .ne{color:var(--text)!important;}
-
-/* Spinner */
+/* Strategy card */
+.strat-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+.strat-card{background:#07090f;border:2px solid var(--border2);border-radius:12px;padding:14px;cursor:pointer;transition:all .2s;text-align:center;}
+.strat-card:hover{border-color:var(--muted2);}
+.strat-card.selected{border-color:var(--blue);background:#1e3a8a15;}
+.strat-icon{font-size:24px;margin-bottom:6px;}
+.strat-name{font-size:12px;font-weight:700;margin-bottom:3px;}
+.strat-desc{font-size:10px;color:var(--muted2);line-height:1.4;}
+/* RSI gauge */
+.rsi-gauge{display:flex;align-items:center;gap:10px;margin-top:8px;}
+.rsi-bar{flex:1;height:8px;border-radius:99px;background:linear-gradient(90deg,var(--green),var(--yellow),var(--red));position:relative;}
+.rsi-marker{position:absolute;top:50%;width:10px;height:10px;background:#fff;border-radius:50%;border:2px solid var(--bg);transform:translate(-50%,-50%);transition:left .4s;}
+.up{color:var(--green)!important;}.dn{color:var(--red)!important;}.ne{color:var(--text)!important;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .spin{width:14px;height:14px;border:2px solid #ffffff30;border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
-
-@media(max-width:700px){.layout{grid-template-columns:1fr;}.sidebar{display:none;}.tiles{grid-template-columns:1fr 1fr;}}
+@media(max-width:700px){.layout{grid-template-columns:1fr;}.sidebar{display:none;}.tiles{grid-template-columns:1fr 1fr;}.strat-cards{grid-template-columns:1fr 1fr;}}
 </style>
 </head>
 <body>
 <div class="layout">
 
-<!-- ── SIDEBAR ── -->
+<!-- SIDEBAR -->
 <div class="sidebar">
   <div class="sb-logo"><h1>📈 KushBot</h1><span>Alpaca Auto Trader</span></div>
   <nav class="sb-nav">
-    <div class="section-lbl">Setup</div>
+    <div class="lbl">Setup</div>
     <a id="nav-connect"   onclick="nav('connect')"   class="active">🔑  Connect</a>
     <a id="nav-dashboard" onclick="nav('dashboard')">📊  Dashboard</a>
-    <div class="section-lbl">Trading</div>
+    <div class="lbl">Trading</div>
     <a id="nav-trade"     onclick="nav('trade')">⚡  Quick Trade</a>
     <a id="nav-auto"      onclick="nav('auto')">🤖  Auto Engine</a>
-    <div class="section-lbl">Monitor</div>
+    <div class="lbl">Monitor</div>
     <a id="nav-positions" onclick="nav('positions')">💼  Positions</a>
     <a id="nav-orders"    onclick="nav('orders')">📋  Orders</a>
   </nav>
@@ -150,253 +115,346 @@ select option{background:#0d1117;}
   </div>
 </div>
 
-<!-- ── MAIN ── -->
+<!-- MAIN -->
 <div style="overflow-y:auto;">
 
-  <!-- CONNECT -->
-  <div class="page active" id="page-connect">
-    <div class="page-title">Connect to Alpaca</div>
-    <div class="page-sub">Enter your API credentials to get started.</div>
-    <div class="card" style="max-width:520px;">
-      <div class="card-title">Credentials</div>
-      <div class="toggle">
-        <div class="tog on" id="ep-paper"  onclick="setEp('paper')">📋 Paper</div>
-        <div class="tog"    id="ep-live"   onclick="setEp('live')">💰 Live</div>
-        <div class="tog"    id="ep-custom" onclick="setEp('custom')">⚙️ Custom</div>
+<!-- ══ CONNECT ══ -->
+<div class="page active" id="page-connect">
+  <div class="page-title">Connect to Alpaca</div>
+  <div class="page-sub">Enter your API credentials to get started.</div>
+  <div class="card" style="max-width:520px;">
+    <div class="card-title">Credentials</div>
+    <div class="toggle">
+      <div class="tog on" id="ep-paper"  onclick="setEp('paper')">📋 Paper</div>
+      <div class="tog"    id="ep-live"   onclick="setEp('live')">💰 Live</div>
+      <div class="tog"    id="ep-custom" onclick="setEp('custom')">⚙️ Custom</div>
+    </div>
+    <div class="alert a-warn hidden" id="live-warn">⚠️ <strong>Live mode — real money.</strong></div>
+    <div class="row c1"><div><label>Endpoint URL</label><input id="c-ep" value="https://paper-api.alpaca.markets" readonly/></div></div>
+    <div class="row c2">
+      <div><label>API Key</label><input id="c-key" type="text" placeholder="PKxxxxxxxxxxxxxxxxxx"/></div>
+      <div><label>Secret Key</label><input id="c-sec" type="password" placeholder="••••••••••••••••••••••••••••••••"/></div>
+    </div>
+    <div class="row c1 hidden" id="custom-row"><div><label>Custom Endpoint</label><input id="c-cust" placeholder="https://paper-api.alpaca.markets"/></div></div>
+    <button class="btn btn-blue btn-full" id="conn-btn" onclick="doConnect()" style="margin-top:4px;">Connect</button>
+    <div class="alert a-err hidden" id="conn-err"></div>
+    <div class="alert a-ok  hidden" id="conn-ok"></div>
+  </div>
+</div>
+
+<!-- ══ DASHBOARD ══ -->
+<div class="page" id="page-dashboard">
+  <div class="page-title">Dashboard</div>
+  <div class="page-sub">Live account overview.</div>
+  <div class="tiles">
+    <div class="tile"><div class="tile-lbl">Portfolio Value</div><div class="tile-val ne" id="d-port">—</div></div>
+    <div class="tile"><div class="tile-lbl">Buying Power</div><div class="tile-val ne" id="d-bp">—</div></div>
+    <div class="tile"><div class="tile-lbl">Cash</div><div class="tile-val ne" id="d-cash">—</div></div>
+    <div class="tile"><div class="tile-lbl">Open Positions</div><div class="tile-val ne" id="d-npos">—</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Positions</div>
+    <table class="tbl"><thead><tr><th>Symbol</th><th>Shares</th><th>Avg Cost</th><th>Price</th><th>Value</th><th>P&amp;L</th><th>P&amp;L %</th></tr></thead>
+    <tbody id="d-pos"><tr><td class="empty" colspan="7">No positions</td></tr></tbody></table>
+  </div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <div class="card-title" style="margin:0">Recent Orders</div>
+      <button class="btn btn-ghost" onclick="refreshDash()" style="padding:6px 12px;font-size:12px;">↻ Refresh</button>
+    </div>
+    <table class="tbl"><thead><tr><th>Symbol</th><th>Side</th><th>Type</th><th>Qty</th><th>Status</th><th>Price</th><th>Time</th></tr></thead>
+    <tbody id="d-ord"><tr><td class="empty" colspan="7">No orders</td></tr></tbody></table>
+  </div>
+</div>
+
+<!-- ══ QUICK TRADE ══ -->
+<div class="page" id="page-trade">
+  <div class="page-title">Quick Trade</div>
+  <div class="page-sub">Place an order instantly.</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div class="card">
+      <div class="card-title">New Order</div>
+      <div class="row c1"><div><label>Symbol</label><input id="t-sym" placeholder="AAPL" oninput="this.value=this.value.toUpperCase()" onchange="fetchQ()"/></div></div>
+      <div id="q-box" class="hidden" style="background:#07090f;border:1px solid var(--border2);border-radius:8px;padding:10px 14px;margin-bottom:12px;display:flex;gap:24px;">
+        <div><div style="font-size:10px;color:var(--muted2)">LAST</div><div id="q-price" style="font-size:20px;font-weight:700">—</div></div>
       </div>
-      <div class="alert a-warn hidden" id="live-warn">⚠️ <strong>Live mode — real money.</strong> Double-check your keys.</div>
-      <div class="row c1" style="margin-bottom:12px;">
-        <div><label>Endpoint URL</label><input id="c-ep" value="https://paper-api.alpaca.markets" readonly/></div>
+      <div class="toggle">
+        <div class="tog on" id="sb-buy"  onclick="setSide('buy')">Buy</div>
+        <div class="tog"    id="sb-sell" onclick="setSide('sell')">Sell</div>
       </div>
       <div class="row c2">
-        <div><label>API Key</label><input id="c-key" type="text" placeholder="PKxxxxxxxxxxxxxxxxxx"/></div>
-        <div><label>Secret Key</label><input id="c-sec" type="password" placeholder="••••••••••••••••••••••••••••••••"/></div>
-      </div>
-      <div class="row c1 hidden" id="custom-row">
-        <div><label>Custom Endpoint</label><input id="c-cust" placeholder="https://paper-api.alpaca.markets"/></div>
-      </div>
-      <button class="btn btn-blue btn-full" id="conn-btn" onclick="doConnect()" style="margin-top:4px;">Connect</button>
-      <div class="alert a-err hidden" id="conn-err"></div>
-      <div class="alert a-ok  hidden" id="conn-ok"></div>
-    </div>
-  </div>
-
-  <!-- DASHBOARD -->
-  <div class="page" id="page-dashboard">
-    <div class="page-title">Dashboard</div>
-    <div class="page-sub">Live account overview.</div>
-    <div class="tiles">
-      <div class="tile"><div class="tile-lbl">Portfolio Value</div><div class="tile-val ne" id="d-port">—</div></div>
-      <div class="tile"><div class="tile-lbl">Buying Power</div><div class="tile-val ne" id="d-bp">—</div></div>
-      <div class="tile"><div class="tile-lbl">Cash</div><div class="tile-val ne" id="d-cash">—</div></div>
-      <div class="tile"><div class="tile-lbl">Open Positions</div><div class="tile-val ne" id="d-npos">—</div></div>
-    </div>
-    <div class="card">
-      <div class="card-title">Positions</div>
-      <table class="tbl"><thead><tr><th>Symbol</th><th>Shares</th><th>Avg Cost</th><th>Price</th><th>Value</th><th>P&amp;L</th><th>P&amp;L %</th></tr></thead>
-      <tbody id="d-pos"><tr><td class="empty" colspan="7">No positions</td></tr></tbody></table>
-    </div>
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-        <div class="card-title" style="margin:0">Recent Orders</div>
-        <button class="btn btn-ghost" onclick="refreshDash()" style="padding:6px 12px;font-size:12px;">↻ Refresh</button>
-      </div>
-      <table class="tbl"><thead><tr><th>Symbol</th><th>Side</th><th>Type</th><th>Qty</th><th>Status</th><th>Price</th><th>Time</th></tr></thead>
-      <tbody id="d-ord"><tr><td class="empty" colspan="7">No orders</td></tr></tbody></table>
-    </div>
-  </div>
-
-  <!-- QUICK TRADE -->
-  <div class="page" id="page-trade">
-    <div class="page-title">Quick Trade</div>
-    <div class="page-sub">Place an order instantly.</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-      <div class="card">
-        <div class="card-title">New Order</div>
-        <div class="row c1"><div><label>Symbol</label><input id="t-sym" placeholder="AAPL" oninput="this.value=this.value.toUpperCase()" onchange="fetchQ()"/></div></div>
-        <div id="q-box" class="hidden" style="background:#07090f;border:1px solid var(--border2);border-radius:8px;padding:10px 14px;margin-bottom:12px;display:flex;gap:24px;">
-          <div><div style="font-size:10px;color:var(--muted2)">LAST</div><div id="q-price" style="font-size:20px;font-weight:700">—</div></div>
-        </div>
-        <div class="toggle">
-          <div class="tog on" id="sb-buy"  onclick="setSide('buy')">Buy</div>
-          <div class="tog"    id="sb-sell" onclick="setSide('sell')">Sell</div>
-        </div>
-        <div class="row c2">
-          <div><label>Order Type</label>
-            <select id="t-type" onchange="onType()">
-              <option value="market">Market</option>
-              <option value="limit">Limit</option>
-              <option value="trailing_stop">Trailing Stop</option>
-            </select>
-          </div>
-          <div><label>Time in Force</label>
-            <select id="t-tif">
-              <option value="day">Day</option>
-              <option value="gtc">GTC</option>
-              <option value="ioc">IOC</option>
-            </select>
-          </div>
-        </div>
-        <div class="row c2">
-          <div><label>Qty (shares)</label><input id="t-qty" type="number" placeholder="0" min="1"/></div>
-          <div><label>OR Dollar ($)</label><input id="t-usd" type="number" placeholder="50"/></div>
-        </div>
-        <div id="lim-row" class="row c1 hidden"><div><label>Limit Price</label><input id="t-lim" type="number" step="0.01" placeholder="0.00"/></div></div>
-        <div id="trl-row" class="row c1 hidden"><div><label>Trail %</label><input id="t-trl" type="number" value="5" min="0.1" step="0.1"/></div></div>
-        <button class="btn btn-green btn-full" id="trade-btn" onclick="placeOrder()" style="margin-top:4px;">Place Order</button>
-        <div class="alert a-err hidden" id="t-err"></div>
-        <div class="alert a-ok  hidden" id="t-ok"></div>
-      </div>
-      <div class="card">
-        <div class="card-title">Trade Log</div>
-        <div class="log-box" id="t-log"><div class="log-row">Waiting for trades…</div></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- AUTO ENGINE -->
-  <div class="page" id="page-auto">
-    <div class="page-title">Auto Engine</div>
-    <div class="page-sub">Set a strategy and let the bot trade for you automatically.</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-      <div class="card">
-        <div class="card-title">Strategy</div>
-        <div class="row c1"><div><label>Symbol</label><input id="a-sym" placeholder="AAPL" oninput="this.value=this.value.toUpperCase()"/></div></div>
-        <div class="row c1">
-          <div><label>Strategy</label>
-            <select id="a-strat" onchange="onStrat()">
-              <option value="trailing">Trailing Stop — ride gains, auto-sell on dip</option>
-              <option value="bracket">Bracket — take profit + stop loss</option>
-              <option value="dca">DCA — buy a fixed amount every N minutes</option>
-            </select>
-          </div>
-        </div>
-        <div class="row c2">
-          <div><label>Dollar Amount ($)</label><input id="a-usd" type="number" value="50"/></div>
-          <div><label>Check Every (min)</label><input id="a-int" type="number" value="1" min="1"/></div>
-        </div>
-        <div id="s-trail">
-          <div class="row c1"><div><label>Trail %</label><input id="a-trail" type="number" value="5" min="0.5" step="0.5"/></div></div>
-        </div>
-        <div id="s-bracket" class="hidden">
-          <div class="row c2">
-            <div><label>Take Profit %</label><input id="a-tp" type="number" value="10"/></div>
-            <div><label>Stop Loss %</label><input id="a-sl" type="number" value="5"/></div>
-          </div>
-        </div>
-        <div id="s-dca" class="hidden">
-          <div class="alert a-warn" style="margin-top:0">Buys $<span id="dca-usd">50</span> of <span id="dca-sym">—</span> every <span id="dca-int">1</span> min.</div>
-        </div>
-        <div style="display:flex;gap:10px;margin-top:8px;">
-          <button class="btn btn-green" id="eng-start" onclick="startEng()">▶ Start Engine</button>
-          <button class="btn btn-red hidden" id="eng-stop" onclick="stopEng()">■ Stop Engine</button>
-        </div>
-        <div class="alert a-err hidden" id="eng-err"></div>
-      </div>
-      <div class="card">
-        <div class="card-title">Engine Status</div>
-        <div class="eng-row"><span class="eng-lbl">Status</span><span class="eng-val" id="e-status"><span class="badge bx">STOPPED</span></span></div>
-        <div class="eng-row"><span class="eng-lbl">Symbol</span><span class="eng-val" id="e-sym">—</span></div>
-        <div class="eng-row"><span class="eng-lbl">Strategy</span><span class="eng-val" id="e-strat">—</span></div>
-        <div class="eng-row"><span class="eng-lbl">Ticks</span><span class="eng-val" id="e-runs">0</span></div>
-        <div class="eng-row"><span class="eng-lbl">Last Tick</span><span class="eng-val" id="e-last">—</span></div>
-        <div class="eng-row"><span class="eng-lbl">Position</span><span class="eng-val" id="e-pos">None</span></div>
-        <div class="eng-row"><span class="eng-lbl">Stop Triggers At</span><span class="eng-val" id="e-stop">—</span></div>
-        <div class="pbar-wrap hidden" id="e-pbar">
-          <div class="pbar-labels">
-            <span>Stop<b id="pl-s">—</b></span>
-            <span>Price<b id="pl-p">—</b></span>
-            <span>Peak<b id="pl-k">—</b></span>
-          </div>
-          <div class="pbar"><div class="pbar-fill" id="pb-fill" style="width:50%"></div><div class="pbar-dot" id="pb-dot" style="left:50%"></div></div>
-        </div>
-        <div class="log-box" id="e-log" style="margin-top:12px;"><div class="log-row">Engine not running…</div></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- POSITIONS -->
-  <div class="page" id="page-positions">
-    <div class="page-title">Positions</div>
-    <div class="page-sub">All currently open positions.</div>
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-        <div class="card-title" style="margin:0">Holdings</div>
-        <div style="display:flex;gap:8px;">
-          <button class="btn btn-ghost" onclick="loadPos()" style="padding:6px 12px;font-size:12px;">↻ Refresh</button>
-          <button class="btn btn-red"   onclick="closeAll()" style="padding:6px 12px;font-size:12px;">Close All</button>
-        </div>
-      </div>
-      <table class="tbl"><thead><tr><th>Symbol</th><th>Side</th><th>Qty</th><th>Avg Entry</th><th>Current</th><th>Value</th><th>P&amp;L</th><th>P&amp;L %</th><th></th></tr></thead>
-      <tbody id="pos-tbl"><tr><td class="empty" colspan="9">No open positions</td></tr></tbody></table>
-    </div>
-  </div>
-
-  <!-- ORDERS -->
-  <div class="page" id="page-orders">
-    <div class="page-title">Orders</div>
-    <div class="page-sub">Order history and open orders.</div>
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-        <div class="card-title" style="margin:0">Order History</div>
-        <div style="display:flex;gap:8px;">
-          <select id="ord-f" onchange="loadOrd()" style="width:auto;padding:6px 10px;font-size:12px;">
-            <option value="all">All</option><option value="open">Open</option><option value="closed">Closed</option>
+        <div><label>Order Type</label>
+          <select id="t-type" onchange="onType()">
+            <option value="market">Market</option>
+            <option value="limit">Limit</option>
+            <option value="trailing_stop">Trailing Stop</option>
           </select>
-          <button class="btn btn-ghost" onclick="loadOrd()" style="padding:6px 12px;font-size:12px;">↻ Refresh</button>
-          <button class="btn btn-red" onclick="cancelAll()" style="padding:6px 12px;font-size:12px;">Cancel Open</button>
+        </div>
+        <div><label>Time in Force</label>
+          <select id="t-tif"><option value="day">Day</option><option value="gtc">GTC</option><option value="ioc">IOC</option></select>
         </div>
       </div>
-      <table class="tbl"><thead><tr><th>Symbol</th><th>Side</th><th>Type</th><th>Qty</th><th>Filled</th><th>Price</th><th>Status</th><th>Time</th><th></th></tr></thead>
-      <tbody id="ord-tbl"><tr><td class="empty" colspan="9">No orders</td></tr></tbody></table>
+      <div class="row c2">
+        <div><label>Qty (shares)</label><input id="t-qty" type="number" placeholder="0" min="1"/></div>
+        <div><label>OR Dollar ($)</label><input id="t-usd" type="number" placeholder="50"/></div>
+      </div>
+      <div id="lim-row" class="row c1 hidden"><div><label>Limit Price</label><input id="t-lim" type="number" step="0.01" placeholder="0.00"/></div></div>
+      <div id="trl-row" class="row c1 hidden"><div><label>Trail %</label><input id="t-trl" type="number" value="5" min="0.1" step="0.1"/></div></div>
+      <button class="btn btn-green btn-full" id="trade-btn" onclick="placeOrder()" style="margin-top:4px;">Place Order</button>
+      <div class="alert a-err hidden" id="t-err"></div>
+      <div class="alert a-ok  hidden" id="t-ok"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Trade Log</div>
+      <div class="log-box" id="t-log"><div class="log-row">Waiting for trades…</div></div>
     </div>
   </div>
+</div>
+
+<!-- ══ AUTO ENGINE ══ -->
+<div class="page" id="page-auto">
+  <div class="page-title">Auto Engine</div>
+  <div class="page-sub">Choose a strategy — the bot monitors and trades automatically.</div>
+
+  <!-- Strategy picker -->
+  <div class="strat-cards" id="strat-picker">
+    <div class="strat-card selected" id="sc-trail"    onclick="pickStrat('trail')">
+      <div class="strat-icon">📈</div>
+      <div class="strat-name">Trailing Stop</div>
+      <div class="strat-desc">Buy now · Trail 5% below peak · Auto-sell on dip</div>
+    </div>
+    <div class="strat-card" id="sc-bracket"  onclick="pickStrat('bracket')">
+      <div class="strat-icon">🎯</div>
+      <div class="strat-name">Bracket</div>
+      <div class="strat-desc">Buy now · Set take-profit & stop-loss targets</div>
+    </div>
+    <div class="strat-card" id="sc-dca"      onclick="pickStrat('dca')">
+      <div class="strat-icon">🔄</div>
+      <div class="strat-name">DCA</div>
+      <div class="strat-desc">Buy fixed $ amount every N minutes regardless of price</div>
+    </div>
+    <div class="strat-card" id="sc-dip"      onclick="pickStrat('dip')">
+      <div class="strat-icon">📉</div>
+      <div class="strat-name">Dip Buy</div>
+      <div class="strat-desc">Wait for X% drop from recent high, then buy & trail</div>
+    </div>
+    <div class="strat-card" id="sc-breakout" onclick="pickStrat('breakout')">
+      <div class="strat-icon">🚀</div>
+      <div class="strat-name">Breakout</div>
+      <div class="strat-desc">Wait for X% rise from recent low, then buy & trail</div>
+    </div>
+    <div class="strat-card" id="sc-rsi"      onclick="pickStrat('rsi')">
+      <div class="strat-icon">📊</div>
+      <div class="strat-name">RSI</div>
+      <div class="strat-desc">Buy when oversold (RSI &lt; 30) · Sell when overbought (RSI &gt; 70)</div>
+    </div>
+    <div class="strat-card" id="sc-ma"       onclick="pickStrat('ma')">
+      <div class="strat-icon">〰️</div>
+      <div class="strat-name">MA Cross</div>
+      <div class="strat-desc">Buy when fast MA crosses above slow MA (golden cross)</div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <!-- Config -->
+    <div class="card">
+      <div class="card-title" id="cfg-title">Strategy Config</div>
+
+      <!-- Common fields -->
+      <div class="row c2">
+        <div><label>Symbol</label><input id="a-sym" placeholder="AAPL" oninput="this.value=this.value.toUpperCase()"/></div>
+        <div><label>Dollar Amount ($)</label><input id="a-usd" type="number" value="50"/></div>
+      </div>
+      <div class="row c2">
+        <div><label>Check Every (min)</label><input id="a-int" type="number" value="1" min="1"/></div>
+        <div><label>Trail % (exit)</label><input id="a-trail" type="number" value="5" min="0.5" step="0.5"/></div>
+      </div>
+
+      <!-- Trailing Stop -->
+      <div id="cfg-trail">
+        <div class="alert a-info" style="margin-top:0">
+          <b>When it buys:</b> Immediately on Start.<br>
+          <b>When it sells:</b> Price drops <span id="lbl-trail">5</span>% from its peak.
+        </div>
+      </div>
+
+      <!-- Bracket -->
+      <div id="cfg-bracket" class="hidden">
+        <div class="row c2">
+          <div><label>Take Profit %</label><input id="a-tp" type="number" value="10" oninput="updBracketLbl()"/></div>
+          <div><label>Stop Loss %</label><input id="a-sl" type="number" value="5" oninput="updBracketLbl()"/></div>
+        </div>
+        <div class="alert a-info" style="margin-top:0" id="bracket-lbl">
+          <b>When it buys:</b> Immediately on Start.<br>
+          <b>When it sells:</b> +10% profit OR −5% loss.
+        </div>
+      </div>
+
+      <!-- DCA -->
+      <div id="cfg-dca" class="hidden">
+        <div class="alert a-info" style="margin-top:0">
+          <b>When it buys:</b> Every <span id="lbl-dca-int">1</span> min regardless of price.<br>
+          <b>Tip:</b> Great for long-term accumulation.
+        </div>
+      </div>
+
+      <!-- Dip Buy -->
+      <div id="cfg-dip" class="hidden">
+        <div class="row c2">
+          <div><label>Dip % to trigger buy</label><input id="a-dip" type="number" value="3" min="0.5" step="0.5" oninput="updDipLbl()"/></div>
+          <div><label>Lookback (bars)</label><input id="a-dip-lb" type="number" value="20" min="5"/></div>
+        </div>
+        <div class="alert a-info" style="margin-top:0" id="dip-lbl">
+          <b>When it buys:</b> When price drops ≥3% from its 20-bar high.<br>
+          <b>When it sells:</b> Price drops 5% from its new peak.
+        </div>
+      </div>
+
+      <!-- Breakout -->
+      <div id="cfg-breakout" class="hidden">
+        <div class="row c2">
+          <div><label>Breakout % to trigger</label><input id="a-bo" type="number" value="2" min="0.5" step="0.5" oninput="updBoLbl()"/></div>
+          <div><label>Lookback (bars)</label><input id="a-bo-lb" type="number" value="20" min="5"/></div>
+        </div>
+        <div class="alert a-info" style="margin-top:0" id="bo-lbl">
+          <b>When it buys:</b> When price rises ≥2% above its 20-bar low.<br>
+          <b>When it sells:</b> Price drops 5% from its new peak.
+        </div>
+      </div>
+
+      <!-- RSI -->
+      <div id="cfg-rsi" class="hidden">
+        <div class="row c3">
+          <div><label>RSI Period</label><input id="a-rsi-p" type="number" value="14" min="5"/></div>
+          <div><label>Buy below (oversold)</label><input id="a-rsi-buy" type="number" value="30" min="10" max="50"/></div>
+          <div><label>Sell above (overbought)</label><input id="a-rsi-sell" type="number" value="70" min="50" max="90"/></div>
+        </div>
+        <div class="alert a-info" style="margin-top:0">
+          <b>When it buys:</b> RSI drops below <span id="lbl-rsi-buy">30</span> (oversold).<br>
+          <b>When it sells:</b> RSI rises above <span id="lbl-rsi-sell">70</span> OR trailing stop hits.
+        </div>
+        <div id="rsi-live" class="hidden" style="margin-top:10px;">
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px;">
+            <span style="color:var(--muted2)">RSI</span><span id="rsi-val" style="font-weight:700">—</span>
+          </div>
+          <div class="rsi-bar"><div class="rsi-marker" id="rsi-marker" style="left:50%"></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted2);margin-top:4px;"><span>0 Oversold</span><span>50</span><span>Overbought 100</span></div>
+        </div>
+      </div>
+
+      <!-- MA Cross -->
+      <div id="cfg-ma" class="hidden">
+        <div class="row c2">
+          <div><label>Fast MA (bars)</label><input id="a-ma-fast" type="number" value="9" min="2"/></div>
+          <div><label>Slow MA (bars)</label><input id="a-ma-slow" type="number" value="21" min="5"/></div>
+        </div>
+        <div class="alert a-info" style="margin-top:0">
+          <b>When it buys:</b> Fast MA crosses <em>above</em> slow MA (golden cross).<br>
+          <b>When it sells:</b> Fast MA crosses <em>below</em> slow MA OR trailing stop hits.
+        </div>
+        <div id="ma-live" class="hidden" style="margin-top:10px;background:#07090f;border:1px solid var(--border2);border-radius:8px;padding:10px 14px;">
+          <div style="display:flex;gap:20px;font-size:12px;">
+            <div><span style="color:var(--muted2)">Fast MA </span><b id="ma-fast-val">—</b></div>
+            <div><span style="color:var(--muted2)">Slow MA </span><b id="ma-slow-val">—</b></div>
+            <div><span style="color:var(--muted2)">Signal </span><b id="ma-signal">—</b></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-top:12px;">
+        <button class="btn btn-green" id="eng-start" onclick="startEng()">▶ Start Engine</button>
+        <button class="btn btn-red hidden" id="eng-stop" onclick="stopEng()">■ Stop Engine</button>
+      </div>
+      <div class="alert a-err hidden" id="eng-err"></div>
+    </div>
+
+    <!-- Status -->
+    <div class="card">
+      <div class="card-title">Engine Status</div>
+      <div class="eng-row"><span class="eng-lbl">Status</span><span class="eng-val" id="e-status"><span class="badge bx">STOPPED</span></span></div>
+      <div class="eng-row"><span class="eng-lbl">Symbol</span><span class="eng-val" id="e-sym">—</span></div>
+      <div class="eng-row"><span class="eng-lbl">Strategy</span><span class="eng-val" id="e-strat">—</span></div>
+      <div class="eng-row"><span class="eng-lbl">Signal</span><span class="eng-val" id="e-signal">Waiting…</span></div>
+      <div class="eng-row"><span class="eng-lbl">Ticks</span><span class="eng-val" id="e-runs">0</span></div>
+      <div class="eng-row"><span class="eng-lbl">Last Tick</span><span class="eng-val" id="e-last">—</span></div>
+      <div class="eng-row"><span class="eng-lbl">Position</span><span class="eng-val" id="e-pos">None</span></div>
+      <div class="eng-row"><span class="eng-lbl">Stop At</span><span class="eng-val" id="e-stop">—</span></div>
+      <div class="pbar-wrap hidden" id="e-pbar">
+        <div class="pbar-labels">
+          <span>Stop<b id="pl-s">—</b></span>
+          <span>Price<b id="pl-p">—</b></span>
+          <span>Peak<b id="pl-k">—</b></span>
+        </div>
+        <div class="pbar"><div class="pbar-fill" id="pb-fill" style="width:50%"></div><div class="pbar-dot" id="pb-dot" style="left:50%"></div></div>
+      </div>
+      <div class="log-box" id="e-log" style="margin-top:12px;"><div class="log-row">Engine not running…</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ POSITIONS ══ -->
+<div class="page" id="page-positions">
+  <div class="page-title">Positions</div>
+  <div class="page-sub">All currently open positions.</div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <div class="card-title" style="margin:0">Holdings</div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-ghost" onclick="loadPos()" style="padding:6px 12px;font-size:12px;">↻ Refresh</button>
+        <button class="btn btn-red"   onclick="closeAll()" style="padding:6px 12px;font-size:12px;">Close All</button>
+      </div>
+    </div>
+    <table class="tbl"><thead><tr><th>Symbol</th><th>Side</th><th>Qty</th><th>Avg Entry</th><th>Current</th><th>Value</th><th>P&amp;L</th><th>P&amp;L %</th><th></th></tr></thead>
+    <tbody id="pos-tbl"><tr><td class="empty" colspan="9">No open positions</td></tr></tbody></table>
+  </div>
+</div>
+
+<!-- ══ ORDERS ══ -->
+<div class="page" id="page-orders">
+  <div class="page-title">Orders</div>
+  <div class="page-sub">Order history and open orders.</div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <div class="card-title" style="margin:0">Order History</div>
+      <div style="display:flex;gap:8px;">
+        <select id="ord-f" onchange="loadOrd()" style="width:auto;padding:6px 10px;font-size:12px;">
+          <option value="all">All</option><option value="open">Open</option><option value="closed">Closed</option>
+        </select>
+        <button class="btn btn-ghost" onclick="loadOrd()" style="padding:6px 12px;font-size:12px;">↻ Refresh</button>
+        <button class="btn btn-red" onclick="cancelAll()" style="padding:6px 12px;font-size:12px;">Cancel Open</button>
+      </div>
+    </div>
+    <table class="tbl"><thead><tr><th>Symbol</th><th>Side</th><th>Type</th><th>Qty</th><th>Filled</th><th>Price</th><th>Status</th><th>Time</th><th></th></tr></thead>
+    <tbody id="ord-tbl"><tr><td class="empty" colspan="9">No orders</td></tr></tbody></table>
+  </div>
+</div>
 
 </div><!-- /main -->
 </div><!-- /layout -->
 
 <script>
-// ── Global state ───────────────────────────────────────────────────────────
-const G = {
-  key:"", secret:"", endpoint:"https://paper-api.alpaca.markets",
-  ok:false, side:"buy", type:"market",
-  E:{ on:false, timer:null, sym:"", strat:"trailing",
-      usd:50, trail:5, tp:10, sl:5, interval:1,
-      qty:0, buy:0, peak:0, stopId:null, runs:0 }
+// ── State ──────────────────────────────────────────────────────────────────
+const G={
+  key:"",secret:"",endpoint:"https://paper-api.alpaca.markets",ok:false,
+  side:"buy",type:"market",
+  strat:"trail",
+  E:{on:false,timer:null,sym:"",usd:50,trail:5,tp:10,sl:5,interval:1,
+     dipPct:3,dipLB:20,boPct:2,boLB:20,
+     rsiPeriod:14,rsiBuy:30,rsiSell:70,
+     maFast:9,maSlow:21,
+     qty:0,buy:0,peak:0,stopId:null,runs:0,
+     prevFastMA:null,prevSlowMA:null}
 };
 
 // ── Nav ────────────────────────────────────────────────────────────────────
 function nav(p){
   document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
   document.querySelectorAll(".sb-nav a").forEach(x=>x.classList.remove("active"));
-  document.getElementById("page-"+p).classList.add("active");
-  document.getElementById("nav-"+p).classList.add("active");
-  if(p==="dashboard") refreshDash();
-  if(p==="positions") loadPos();
-  if(p==="orders")    loadOrd();
-}
-
-// ── API ────────────────────────────────────────────────────────────────────
-async function api(method,path,body){
-  try{
-    const headers={"APCA-API-KEY-ID":G.key,"APCA-API-SECRET-KEY":G.secret};
-    if(body) headers["Content-Type"]="application/json";
-    const r=await fetch(G.endpoint+path,{
-      method, headers,
-      body:body?JSON.stringify(body):undefined
-    });
-    const txt=await r.text();
-    try{return{ok:r.ok,s:r.status,d:JSON.parse(txt)};}
-    catch{return{ok:false,s:r.status,d:{message:txt}};}
-  }catch(e){return{ok:false,s:0,d:{message:"Network error — make sure you're opening the bot from http://localhost:8080/bot.html (not from file://). Run start.command to fix this."}};}
-}
-
-async function price(sym){
-  try{
-    const r=await fetch(`https://data.alpaca.markets/v2/stocks/${sym}/trades/latest?feed=iex`,
-      {headers:{"APCA-API-KEY-ID":G.key,"APCA-API-SECRET-KEY":G.secret}});
-    return (await r.json())?.trade?.p??null;
-  }catch{return null;}
+  $("page-"+p).classList.add("active");
+  $("nav-"+p).classList.add("active");
+  if(p==="dashboard")refreshDash();
+  if(p==="positions")loadPos();
+  if(p==="orders")loadOrd();
 }
 
 const $=id=>document.getElementById(id);
@@ -404,112 +462,108 @@ const fmt=n=>n==null?"—":"$"+parseFloat(n).toLocaleString("en-US",{minimumFrac
 const pct=n=>{const v=parseFloat(n);return(v>=0?"+":"")+v.toFixed(2)+"%";};
 const ts=()=>new Date().toLocaleTimeString();
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+function showErr(id,msg){const e=$(id);e.textContent="⚠️ "+msg;e.classList.remove("hidden");}
+
+// ── API ────────────────────────────────────────────────────────────────────
+async function api(method,path,body){
+  try{
+    const h={"APCA-API-KEY-ID":G.key,"APCA-API-SECRET-KEY":G.secret};
+    if(body)h["Content-Type"]="application/json";
+    const r=await fetch(G.endpoint+path,{method,headers:h,body:body?JSON.stringify(body):undefined});
+    const txt=await r.text();
+    try{return{ok:r.ok,s:r.status,d:JSON.parse(txt)};}
+    catch{return{ok:false,s:r.status,d:{message:txt}};}
+  }catch(e){return{ok:false,s:0,d:{message:e.message}};}
+}
+
+async function getPrice(sym){
+  try{
+    const r=await fetch(`https://data.alpaca.markets/v2/stocks/${sym}/trades/latest?feed=iex`,
+      {headers:{"APCA-API-KEY-ID":G.key,"APCA-API-SECRET-KEY":G.secret}});
+    return (await r.json())?.trade?.p??null;
+  }catch{return null;}
+}
+
+async function getBars(sym,limit=50,tf="1Min"){
+  try{
+    const r=await fetch(`https://data.alpaca.markets/v2/stocks/${sym}/bars?timeframe=${tf}&limit=${limit}&feed=iex&sort=asc`,
+      {headers:{"APCA-API-KEY-ID":G.key,"APCA-API-SECRET-KEY":G.secret}});
+    return (await r.json())?.bars??[];
+  }catch{return[];}
+}
 
 // ── Endpoint ───────────────────────────────────────────────────────────────
 function setEp(m){
-  ["paper","live","custom"].forEach(x=>$(  "ep-"+x).classList.toggle("on",x===m));
+  ["paper","live","custom"].forEach(x=>$("ep-"+x).classList.toggle("on",x===m));
   $("live-warn").classList.toggle("hidden",m!=="live");
   const ep=$("c-ep");
-  if(m==="paper") {ep.value="https://paper-api.alpaca.markets";ep.readOnly=true;$("custom-row").classList.add("hidden");}
-  if(m==="live")  {ep.value="https://api.alpaca.markets";      ep.readOnly=true;$("custom-row").classList.add("hidden");}
+  if(m==="paper"){ep.value="https://paper-api.alpaca.markets";ep.readOnly=true;$("custom-row").classList.add("hidden");}
+  if(m==="live") {ep.value="https://api.alpaca.markets";      ep.readOnly=true;$("custom-row").classList.add("hidden");}
   if(m==="custom"){ep.value="";ep.readOnly=false;$("custom-row").classList.remove("hidden");}
 }
 
 // ── Connect ────────────────────────────────────────────────────────────────
 async function doConnect(){
-  $("conn-err").classList.add("hidden");
-  $("conn-ok").classList.add("hidden");
+  $("conn-err").classList.add("hidden");$("conn-ok").classList.add("hidden");
   G.key=$("c-key").value.trim();
   G.secret=$("c-sec").value.trim();
-  G.endpoint=($("c-cust").value.trim()||$("c-ep").value.trim());
+  G.endpoint=$("c-cust").value.trim()||$("c-ep").value.trim();
   if(!G.key||!G.secret){showErr("conn-err","Enter API Key and Secret Key.");return;}
   const btn=$("conn-btn");
-  btn.innerHTML="<span class='spin'></span> Connecting…"; btn.disabled=true;
+  btn.innerHTML="<span class='spin'></span> Connecting…";btn.disabled=true;
   const r=await api("GET","/v2/account");
-  btn.textContent="Connect"; btn.disabled=false;
-  if(!r.ok||!r.d.id){showErr("conn-err",r.d.message||"Invalid credentials — check and try again.");return;}
+  btn.textContent="Connect";btn.disabled=false;
+  if(!r.ok||!r.d.id){showErr("conn-err",r.d.message||"Invalid credentials.");return;}
   G.ok=true;
-  $("sb-dot").classList.add("on"); $("sb-txt").textContent="Connected";
+  $("sb-dot").classList.add("on");$("sb-txt").textContent="Connected";
   $("conn-ok").textContent="✅ Connected — Account #"+r.d.account_number;
   $("conn-ok").classList.remove("hidden");
   setTimeout(()=>nav("dashboard"),700);
 }
 
-function showErr(id,msg){const e=$(id);e.textContent="⚠️ "+msg;e.classList.remove("hidden");}
-
 // ── Dashboard ──────────────────────────────────────────────────────────────
 async function refreshDash(){
   if(!G.ok)return;
   const a=(await api("GET","/v2/account")).d;
-  $("d-port").textContent=fmt(a.portfolio_value);
-  $("d-bp").textContent=fmt(a.buying_power);
-  $("d-cash").textContent=fmt(a.cash);
-  const pr=await api("GET","/v2/positions");
-  const ps=pr.ok?pr.d:[];
-  $("d-npos").textContent=ps.length;
-  $("d-pos").innerHTML=ps.length?ps.map(p=>{
-    const v=parseFloat(p.unrealized_pl);
-    return`<tr><td><b>${p.symbol}</b></td><td>${p.qty}</td><td>${fmt(p.avg_entry_price)}</td><td>${fmt(p.current_price)}</td><td>${fmt(p.market_value)}</td><td class="${v>=0?'up':'dn'}">${fmt(v)}</td><td class="${v>=0?'up':'dn'}">${pct(p.unrealized_plpc*100)}</td></tr>`;
-  }).join(""):'<tr><td class="empty" colspan="7">No positions</td></tr>';
-  const or=await api("GET","/v2/orders?limit=10&status=all");
-  const os=or.ok?or.d:[];
-  $("d-ord").innerHTML=os.length?os.map(o=>ordRow(o,false)).join(""):'<tr><td class="empty" colspan="7">No orders</td></tr>';
+  $("d-port").textContent=fmt(a.portfolio_value);$("d-bp").textContent=fmt(a.buying_power);$("d-cash").textContent=fmt(a.cash);
+  const ps=(await api("GET","/v2/positions")).d||[];
+  $("d-npos").textContent=Array.isArray(ps)?ps.length:0;
+  $("d-pos").innerHTML=Array.isArray(ps)&&ps.length?ps.map(p=>{const v=parseFloat(p.unrealized_pl);return`<tr><td><b>${p.symbol}</b></td><td>${p.qty}</td><td>${fmt(p.avg_entry_price)}</td><td>${fmt(p.current_price)}</td><td>${fmt(p.market_value)}</td><td class="${v>=0?'up':'dn'}">${fmt(v)}</td><td class="${v>=0?'up':'dn'}">${pct(p.unrealized_plpc*100)}</td></tr>`;}).join(""):'<tr><td class="empty" colspan="7">No positions</td></tr>';
+  const os=(await api("GET","/v2/orders?limit=10&status=all")).d||[];
+  $("d-ord").innerHTML=Array.isArray(os)&&os.length?os.map(o=>oRow(o,false)).join(""):'<tr><td class="empty" colspan="7">No orders</td></tr>';
 }
 
-function ordRow(o,actions){
+function oRow(o,act){
   const cm={filled:"bg",new:"bb",partially_filled:"by",canceled:"bx",rejected:"bx",expired:"bx"};
   const t=o.created_at?new Date(o.created_at).toLocaleString():"—";
   const pr=o.filled_avg_price?fmt(o.filled_avg_price):o.limit_price?fmt(o.limit_price):"—";
-  return`<tr>
-    <td><b>${o.symbol}</b></td>
-    <td class="${o.side==="buy"?"up":"dn"}">${o.side.toUpperCase()}</td>
-    <td>${o.type}</td><td>${o.qty}</td><td>${o.filled_qty||0}</td><td>${pr}</td>
-    <td><span class="badge ${cm[o.status]||"bx"}">${o.status}</span></td>
-    <td style="font-size:11px">${t}</td>
-    ${actions?`<td>${["new","partially_filled"].includes(o.status)?`<button class="btn btn-ghost" style="padding:4px 10px;font-size:11px" onclick="cancelOrd('${o.id}')">Cancel</button>`:"—"}</td>`:""}
-  </tr>`;
-}
-
-// ── Quote ──────────────────────────────────────────────────────────────────
-async function fetchQ(){
-  const sym=$("t-sym").value.trim().toUpperCase();
-  if(!sym||!G.ok){$("q-box").classList.add("hidden");return;}
-  const p=await price(sym);
-  if(!p){$("q-box").classList.add("hidden");return;}
-  $("q-price").textContent=fmt(p);
-  $("q-box").classList.remove("hidden");
+  return`<tr><td><b>${o.symbol}</b></td><td class="${o.side==="buy"?"up":"dn"}">${o.side.toUpperCase()}</td><td>${o.type}</td><td>${o.qty}</td><td>${o.filled_qty||0}</td><td>${pr}</td><td><span class="badge ${cm[o.status]||"bx"}">${o.status}</span></td><td style="font-size:11px">${t}</td>${act?`<td>${["new","partially_filled"].includes(o.status)?`<button class="btn btn-ghost" style="padding:4px 10px;font-size:11px" onclick="cancelOrd('${o.id}')">Cancel</button>`:"—"}</td>`:""}</tr>`;
 }
 
 // ── Quick Trade ────────────────────────────────────────────────────────────
 function setSide(s){G.side=s;$("sb-buy").classList.toggle("on",s==="buy");$("sb-sell").classList.toggle("on",s==="sell");}
-function onType(){
-  G.type=$("t-type").value;
-  $("lim-row").classList.toggle("hidden",G.type!=="limit");
-  $("trl-row").classList.toggle("hidden",G.type!=="trailing_stop");
+function onType(){G.type=$("t-type").value;$("lim-row").classList.toggle("hidden",G.type!=="limit");$("trl-row").classList.toggle("hidden",G.type!=="trailing_stop");}
+async function fetchQ(){
+  const sym=$("t-sym").value.trim().toUpperCase();if(!sym||!G.ok){$("q-box").classList.add("hidden");return;}
+  const p=await getPrice(sym);if(!p){$("q-box").classList.add("hidden");return;}
+  $("q-price").textContent=fmt(p);$("q-box").classList.remove("hidden");
 }
-
 async function placeOrder(){
-  $("t-err").classList.add("hidden"); $("t-ok").classList.add("hidden");
+  $("t-err").classList.add("hidden");$("t-ok").classList.add("hidden");
   const sym=$("t-sym").value.trim().toUpperCase();
-  const qty=parseInt($("t-qty").value)||0;
-  const usd=parseFloat($("t-usd").value)||0;
+  const qty=parseInt($("t-qty").value)||0,usd=parseFloat($("t-usd").value)||0;
   if(!G.ok)return showErr("t-err","Not connected.");
   if(!sym)return showErr("t-err","Enter a symbol.");
   if(!qty&&!usd)return showErr("t-err","Enter qty or dollar amount.");
-  const btn=$("trade-btn"); btn.innerHTML="<span class='spin'></span> Placing…"; btn.disabled=true;
+  const btn=$("trade-btn");btn.innerHTML="<span class='spin'></span> Placing…";btn.disabled=true;
   let q=qty;
-  if(!q){
-    const p=await price(sym);
-    if(!p){btn.textContent="Place Order";btn.disabled=false;return showErr("t-err","Can't get price for "+sym);}
-    q=Math.floor(usd/p);
-    if(q<1){btn.textContent="Place Order";btn.disabled=false;return showErr("t-err",`$${usd} can't buy 1 share at ${fmt(p)}`);}
-  }
+  if(!q){const p=await getPrice(sym);if(!p){btn.textContent="Place Order";btn.disabled=false;return showErr("t-err","Can't get price for "+sym);}q=Math.floor(usd/p);if(q<1){btn.textContent="Place Order";btn.disabled=false;return showErr("t-err",`$${usd} can't buy 1 share at ${fmt(p)}`);}}
   const body={symbol:sym,qty:q,side:G.side,type:G.type,time_in_force:$("t-tif").value};
-  if(G.type==="limit")         body.limit_price=parseFloat($("t-lim").value);
-  if(G.type==="trailing_stop") body.trail_percent=parseFloat($("t-trl").value)||5;
+  if(G.type==="limit")body.limit_price=parseFloat($("t-lim").value);
+  if(G.type==="trailing_stop")body.trail_percent=parseFloat($("t-trl").value)||5;
   const r=await api("POST","/v2/orders",body);
-  btn.textContent="Place Order"; btn.disabled=false;
-  if(!r.ok){showErr("t-err",r.d.message||"Order failed.");tLog(`FAIL ${G.side.toUpperCase()} ${sym} — ${r.d.message}`,"r");return;}
+  btn.textContent="Place Order";btn.disabled=false;
+  if(!r.ok){showErr("t-err",r.d.message||"Order failed.");tLog(`FAIL — ${r.d.message}`,"r");return;}
   $("t-ok").textContent=`✅ ${G.side.toUpperCase()} ${q}×${sym} ${G.type} submitted`;
   $("t-ok").classList.remove("hidden");
   tLog(`${G.side.toUpperCase()} ${q}×${sym} ${G.type} → ${r.d.status}`,"g");
@@ -519,13 +573,9 @@ function tLog(m,c="w"){const d=document.createElement("div");d.className="log-ro
 // ── Positions ──────────────────────────────────────────────────────────────
 async function loadPos(){
   if(!G.ok)return;
-  const r=await api("GET","/v2/positions");
-  const tbl=$("pos-tbl");
-  if(!r.ok||!r.d.length){tbl.innerHTML='<tr><td class="empty" colspan="9">No open positions</td></tr>';return;}
-  tbl.innerHTML=r.d.map(p=>{
-    const v=parseFloat(p.unrealized_pl);
-    return`<tr><td><b>${p.symbol}</b></td><td><span class="badge ${p.side==="long"?"bg":"br"}">${p.side}</span></td><td>${p.qty}</td><td>${fmt(p.avg_entry_price)}</td><td>${fmt(p.current_price)}</td><td>${fmt(p.market_value)}</td><td class="${v>=0?"up":"dn"}">${fmt(v)}</td><td class="${v>=0?"up":"dn"}">${pct(p.unrealized_plpc*100)}</td><td><button class="btn btn-red" style="padding:4px 10px;font-size:11px" onclick="closePos('${p.symbol}')">Close</button></td></tr>`;
-  }).join("");
+  const r=await api("GET","/v2/positions");const tbl=$("pos-tbl");
+  if(!r.ok||!Array.isArray(r.d)||!r.d.length){tbl.innerHTML='<tr><td class="empty" colspan="9">No open positions</td></tr>';return;}
+  tbl.innerHTML=r.d.map(p=>{const v=parseFloat(p.unrealized_pl);return`<tr><td><b>${p.symbol}</b></td><td><span class="badge ${p.side==="long"?"bg":"br"}">${p.side}</span></td><td>${p.qty}</td><td>${fmt(p.avg_entry_price)}</td><td>${fmt(p.current_price)}</td><td>${fmt(p.market_value)}</td><td class="${v>=0?"up":"dn"}">${fmt(v)}</td><td class="${v>=0?"up":"dn"}">${pct(p.unrealized_plpc*100)}</td><td><button class="btn btn-red" style="padding:4px 10px;font-size:11px" onclick="closePos('${p.symbol}')">Close</button></td></tr>`;}).join("");
 }
 async function closePos(s){if(!confirm("Close "+s+"?"))return;await api("DELETE","/v2/positions/"+s);setTimeout(loadPos,1200);}
 async function closeAll(){if(!confirm("Close ALL positions?"))return;await api("DELETE","/v2/positions");setTimeout(loadPos,1500);}
@@ -533,32 +583,38 @@ async function closeAll(){if(!confirm("Close ALL positions?"))return;await api("
 // ── Orders ─────────────────────────────────────────────────────────────────
 async function loadOrd(){
   if(!G.ok)return;
-  const r=await api("GET",`/v2/orders?limit=50&status=${$("ord-f").value}`);
-  const tbl=$("ord-tbl");
-  if(!r.ok||!r.d.length){tbl.innerHTML='<tr><td class="empty" colspan="9">No orders</td></tr>';return;}
-  tbl.innerHTML=r.d.map(o=>ordRow(o,true)).join("");
+  const r=await api("GET",`/v2/orders?limit=50&status=${$("ord-f").value}`);const tbl=$("ord-tbl");
+  if(!r.ok||!Array.isArray(r.d)||!r.d.length){tbl.innerHTML='<tr><td class="empty" colspan="9">No orders</td></tr>';return;}
+  tbl.innerHTML=r.d.map(o=>oRow(o,true)).join("");
 }
 async function cancelOrd(id){await api("DELETE","/v2/orders/"+id);setTimeout(loadOrd,800);}
 async function cancelAll(){if(!confirm("Cancel all open orders?"))return;await api("DELETE","/v2/orders");setTimeout(loadOrd,1000);}
 
-// ── Auto Engine ────────────────────────────────────────────────────────────
-function onStrat(){
-  const s=$("a-strat").value;
-  $("s-trail").classList.toggle("hidden",s!=="trailing");
-  $("s-bracket").classList.toggle("hidden",s!=="bracket");
-  $("s-dca").classList.toggle("hidden",s!=="dca");
-  dcaLbl();
-}
-function dcaLbl(){
-  $("dca-usd").textContent=$("a-usd").value||50;
-  $("dca-sym").textContent=$("a-sym").value||"—";
-  $("dca-int").textContent=$("a-int").value||1;
-}
-$("a-usd").addEventListener("input",dcaLbl);
-$("a-sym").addEventListener("input",dcaLbl);
-$("a-int").addEventListener("input",dcaLbl);
+// ── Strategy picker ────────────────────────────────────────────────────────
+const stratNames={trail:"Trailing Stop",bracket:"Bracket",dca:"DCA",dip:"Dip Buy",breakout:"Breakout",rsi:"RSI",ma:"MA Cross"};
+const cfgIds=["trail","bracket","dca","dip","breakout","rsi","ma"];
 
+function pickStrat(s){
+  G.strat=s;
+  cfgIds.forEach(x=>{
+    $("sc-"+x).classList.toggle("selected",x===s);
+    $("cfg-"+x).classList.toggle("hidden",x!==s);
+  });
+  $("cfg-title").textContent=stratNames[s]+" Config";
+}
+
+// Live label updaters
+$("a-trail").addEventListener("input",()=>$("lbl-trail").textContent=$("a-trail").value||5);
+$("a-int").addEventListener("input",()=>$("lbl-dca-int").textContent=$("a-int").value||1);
+$("a-rsi-buy").addEventListener("input",()=>$("lbl-rsi-buy").textContent=$("a-rsi-buy").value);
+$("a-rsi-sell").addEventListener("input",()=>$("lbl-rsi-sell").textContent=$("a-rsi-sell").value);
+function updBracketLbl(){$("bracket-lbl").innerHTML=`<b>When it buys:</b> Immediately on Start.<br><b>When it sells:</b> +${$("a-tp").value||10}% profit OR −${$("a-sl").value||5}% loss.`;}
+function updDipLbl(){$("dip-lbl").innerHTML=`<b>When it buys:</b> When price drops ≥${$("a-dip").value||3}% from its ${$("a-dip-lb").value||20}-bar high.<br><b>When it sells:</b> Price drops ${$("a-trail").value||5}% from its new peak.`;}
+function updBoLbl(){$("bo-lbl").innerHTML=`<b>When it buys:</b> When price rises ≥${$("a-bo").value||2}% above its ${$("a-bo-lb").value||20}-bar low.<br><b>When it sells:</b> Price drops ${$("a-trail").value||5}% from its new peak.`;}
+
+// ── Engine ─────────────────────────────────────────────────────────────────
 function eLog(m,c="w"){const d=document.createElement("div");d.className="log-row "+c;d.textContent=`[${ts()}]  ${m}`;$("e-log").prepend(d);}
+function eSig(txt,color){$("e-signal").innerHTML=`<span style="color:${color}">${txt}</span>`;}
 
 async function startEng(){
   $("eng-err").classList.add("hidden");
@@ -566,109 +622,310 @@ async function startEng(){
   const sym=$("a-sym").value.trim().toUpperCase();
   if(!sym){showErr("eng-err","Enter a symbol.");return;}
   const E=G.E;
-  E.on=true; E.sym=sym; E.strat=$("a-strat").value;
+  E.on=true;E.sym=sym;
   E.usd=parseFloat($("a-usd").value)||50;
   E.interval=parseFloat($("a-int").value)||1;
   E.trail=parseFloat($("a-trail").value)||5;
   E.tp=parseFloat($("a-tp").value)||10;
   E.sl=parseFloat($("a-sl").value)||5;
-  E.runs=0; E.qty=0; E.buy=0; E.peak=0; E.stopId=null;
-  $("eng-start").classList.add("hidden"); $("eng-stop").classList.remove("hidden");
+  E.dipPct=parseFloat($("a-dip").value)||3;
+  E.dipLB=parseInt($("a-dip-lb").value)||20;
+  E.boPct=parseFloat($("a-bo").value)||2;
+  E.boLB=parseInt($("a-bo-lb").value)||20;
+  E.rsiPeriod=parseInt($("a-rsi-p").value)||14;
+  E.rsiBuy=parseFloat($("a-rsi-buy").value)||30;
+  E.rsiSell=parseFloat($("a-rsi-sell").value)||70;
+  E.maFast=parseInt($("a-ma-fast").value)||9;
+  E.maSlow=parseInt($("a-ma-slow").value)||21;
+  E.runs=0;E.qty=0;E.buy=0;E.peak=0;E.stopId=null;E.prevFastMA=null;E.prevSlowMA=null;
+  $("eng-start").classList.add("hidden");$("eng-stop").classList.remove("hidden");
   $("e-status").innerHTML='<span class="badge bg">RUNNING</span>';
-  $("e-sym").textContent=sym;
-  const names={trailing:"Trailing Stop",bracket:"Bracket",dca:"DCA"};
-  $("e-strat").textContent=names[E.strat];
-  eLog(`Engine started — ${sym} | ${names[E.strat]} | $${E.usd}`,"g");
+  $("e-sym").textContent=sym;$("e-strat").textContent=stratNames[G.strat];
+  eLog(`Engine started — ${sym} | ${stratNames[G.strat]} | $${E.usd}`,"g");
   tick();
 }
 
 function stopEng(){
-  clearTimeout(G.E.timer); G.E.on=false;
-  $("eng-start").classList.remove("hidden"); $("eng-stop").classList.add("hidden");
+  clearTimeout(G.E.timer);G.E.on=false;
+  $("eng-start").classList.remove("hidden");$("eng-stop").classList.add("hidden");
   $("e-status").innerHTML='<span class="badge bx">STOPPED</span>';
   $("e-pbar").classList.add("hidden");
   eLog("Engine stopped.","y");
 }
 
 async function tick(){
-  const E=G.E; if(!E.on)return;
-  E.runs++; $("e-runs").textContent=E.runs; $("e-last").textContent=ts();
+  const E=G.E;if(!E.on)return;
+  E.runs++;$("e-runs").textContent=E.runs;$("e-last").textContent=ts();
   try{
-    if(E.strat==="trailing") await tickTrail();
-    if(E.strat==="bracket")  await tickBracket();
-    if(E.strat==="dca")      await tickDCA();
+    if(G.strat==="trail")    await tickTrail();
+    if(G.strat==="bracket")  await tickBracket();
+    if(G.strat==="dca")      await tickDCA();
+    if(G.strat==="dip")      await tickDip();
+    if(G.strat==="breakout") await tickBreakout();
+    if(G.strat==="rsi")      await tickRSI();
+    if(G.strat==="ma")       await tickMA();
   }catch(e){eLog("Error: "+e.message,"r");}
-  if(E.on) E.timer=setTimeout(tick,E.interval*60*1000);
+  if(E.on)E.timer=setTimeout(tick,E.interval*60*1000);
 }
 
-async function tickTrail(){
-  const E=G.E;
-  // Check if stop triggered
-  if(E.stopId){
-    const o=(await api("GET","/v2/orders/"+E.stopId)).d;
-    if(o.status==="filled"){
-      const sp=parseFloat(o.filled_avg_price);
-      const pl=(sp-E.buy)*E.qty;
-      eLog(`🏁 SOLD ${E.qty}×${E.sym} @ ${fmt(sp)} | P&L ${pl>=0?"+":""}${fmt(pl)}`,pl>=0?"g":"r");
-      E.qty=0;E.buy=0;E.peak=0;E.stopId=null;
-      $("e-pos").textContent="None";$("e-stop").textContent="—";$("e-pbar").classList.add("hidden");
-      return;
-    }
+// ── Shared helpers ─────────────────────────────────────────────────────────
+async function doBuy(sym,usd){
+  const p=await getPrice(sym);if(!p)throw new Error("No price data");
+  const q=Math.floor(usd/p);if(q<1)throw new Error(`$${usd} can't buy 1 share at ${fmt(p)}`);
+  const r=await api("POST","/v2/orders",{symbol:sym,qty:q,side:"buy",type:"market",time_in_force:"day"});
+  if(!r.ok)throw new Error("Buy failed: "+(r.d.message||""));
+  eLog(`BUY ${q}×${sym} @ ~${fmt(p)}`,"g");
+  await sleep(3000);
+  const filled=(await api("GET","/v2/orders/"+r.d.id)).d;
+  return{qty:q,fillPrice:parseFloat(filled.filled_avg_price||p)};
+}
+
+async function attachTrailStop(sym,qty,trailPct){
+  const r=await api("POST","/v2/orders",{symbol:sym,qty,side:"sell",type:"trailing_stop",trail_percent:trailPct,time_in_force:"gtc"});
+  if(!r.ok)eLog("Trailing stop failed: "+(r.d.message||""),"r");
+  return r.ok?r.d.id:null;
+}
+
+async function checkTrailFired(){
+  const E=G.E;if(!E.stopId)return false;
+  const o=(await api("GET","/v2/orders/"+E.stopId)).d;
+  if(o.status==="filled"){
+    const sp=parseFloat(o.filled_avg_price),pl=(sp-E.buy)*E.qty;
+    eLog(`🏁 SOLD ${E.qty}×${E.sym} @ ${fmt(sp)} | P&L ${pl>=0?"+":""}${fmt(pl)}`,pl>=0?"g":"r");
+    E.qty=0;E.buy=0;E.peak=0;E.stopId=null;
+    $("e-pos").textContent="None";$("e-stop").textContent="—";$("e-pbar").classList.add("hidden");
+    return true;
   }
-  const p=await price(E.sym);
-  if(!p){eLog("No price data","r");return;}
-  if(!E.qty){
-    const q=Math.floor(E.usd/p);
-    if(q<1){eLog(`$${E.usd} can't buy 1 share at ${fmt(p)}`,"r");return;}
-    const b=await api("POST","/v2/orders",{symbol:E.sym,qty:q,side:"buy",type:"market",time_in_force:"day"});
-    if(!b.ok){eLog("Buy failed: "+(b.d.message||""),"r");return;}
-    eLog(`BUY ${q}×${E.sym} @ ~${fmt(p)}`,"g");
-    await sleep(3000);
-    const bf=(await api("GET","/v2/orders/"+b.d.id)).d;
-    E.qty=q; E.buy=parseFloat(bf.filled_avg_price||p); E.peak=E.buy;
-    const so=await api("POST","/v2/orders",{symbol:E.sym,qty:q,side:"sell",type:"trailing_stop",trail_percent:E.trail,time_in_force:"gtc"});
-    if(so.ok)E.stopId=so.d.id;
-    eLog(`Trailing stop set — ${E.trail}% | stops at ${fmt(E.buy*(1-E.trail/100))}`,"g");
-  }
-  if(p>E.peak)E.peak=p;
-  const stop=E.peak*(1-E.trail/100);
-  const pl=(p-E.buy)*E.qty;
-  $("e-pos").textContent=`${E.qty}×${E.sym} @ ${fmt(E.buy)}`;
-  $("e-stop").textContent=fmt(stop);
-  updateBar(E.peak,p,stop);
-  eLog(`${E.sym} ${fmt(p)} | peak ${fmt(E.peak)} | stop ${fmt(stop)} | P&L ${pl>=0?"+":""}${fmt(pl)}`);
-}
-
-async function tickBracket(){
-  const E=G.E;
-  if(E.qty>0){eLog(`Holding ${E.qty}×${E.sym} — bracket active`);return;}
-  const p=await price(E.sym);if(!p)return;
-  const q=Math.floor(E.usd/p);if(q<1){eLog(`Insufficient funds`,"r");return;}
-  const tp=(p*(1+E.tp/100)).toFixed(2), sl=(p*(1-E.sl/100)).toFixed(2);
-  const r=await api("POST","/v2/orders",{symbol:E.sym,qty:q,side:"buy",type:"market",time_in_force:"day",order_class:"bracket",take_profit:{limit_price:tp},stop_loss:{stop_price:sl}});
-  if(!r.ok){eLog("Bracket failed: "+(r.d.message||""),"r");return;}
-  E.qty=q; E.buy=p;
-  $("e-pos").textContent=`${q}×${E.sym} @ ${fmt(p)}`;
-  eLog(`BUY ${q}×${E.sym} @ ~${fmt(p)} | TP ${fmt(tp)} SL ${fmt(sl)}`,"g");
-}
-
-async function tickDCA(){
-  const E=G.E;
-  const p=await price(E.sym);if(!p)return;
-  const q=Math.floor(E.usd/p);if(q<1){eLog(`$${E.usd} insufficient`,"r");return;}
-  const r=await api("POST","/v2/orders",{symbol:E.sym,qty:q,side:"buy",type:"market",time_in_force:"day"});
-  if(!r.ok){eLog("DCA failed: "+(r.d.message||""),"r");return;}
-  E.qty+=q;
-  $("e-pos").textContent=`${E.qty}×${E.sym}`;
-  eLog(`DCA BUY ${q}×${E.sym} @ ~${fmt(p)} (total ${E.qty})`,"g");
+  return false;
 }
 
 function updateBar(peak,price,stop){
   $("e-pbar").classList.remove("hidden");
-  const range=peak-stop;
-  const p=range>0?Math.min(97,Math.max(3,((price-stop)/range)*100)):50;
-  $("pb-fill").style.width=p+"%"; $("pb-dot").style.left=p+"%";
-  $("pl-s").textContent=fmt(stop); $("pl-p").textContent=fmt(price); $("pl-k").textContent=fmt(peak);
+  const range=peak-stop,p=range>0?Math.min(97,Math.max(3,((price-stop)/range)*100)):50;
+  $("pb-fill").style.width=p+"%";$("pb-dot").style.left=p+"%";
+  $("pl-s").textContent=fmt(stop);$("pl-p").textContent=fmt(price);$("pl-k").textContent=fmt(peak);
+}
+
+function updateHolding(price){
+  const E=G.E;if(!E.qty)return;
+  if(price>E.peak)E.peak=price;
+  const stop=E.peak*(1-E.trail/100),pl=(price-E.buy)*E.qty;
+  $("e-pos").textContent=`${E.qty}×${E.sym} @ ${fmt(E.buy)}`;
+  $("e-stop").textContent=fmt(stop);
+  updateBar(E.peak,price,stop);
+  eLog(`${E.sym} ${fmt(price)} | peak ${fmt(E.peak)} | stop ${fmt(stop)} | P&L ${pl>=0?"+":""}${fmt(pl)}`);
+}
+
+// ── 1. Trailing Stop ───────────────────────────────────────────────────────
+async function tickTrail(){
+  const E=G.E;
+  if(await checkTrailFired())return;
+  const p=await getPrice(E.sym);if(!p){eLog("No price","r");return;}
+  if(!E.qty){
+    eSig("Buying now…","var(--yellow)");
+    const{qty,fillPrice}=await doBuy(E.sym,E.usd);
+    E.qty=qty;E.buy=fillPrice;E.peak=fillPrice;
+    E.stopId=await attachTrailStop(E.sym,qty,E.trail);
+    eLog(`Trail stop set at ${fmt(fillPrice*(1-E.trail/100))}`,"g");
+  }
+  eSig("Holding — trailing stop active","var(--green)");
+  updateHolding(p);
+}
+
+// ── 2. Bracket ────────────────────────────────────────────────────────────
+async function tickBracket(){
+  const E=G.E;
+  if(E.qty>0){
+    const p=await getPrice(E.sym);if(p)eLog(`Holding ${E.qty}×${E.sym} @ ${fmt(p)} (bracket active)`);
+    eSig("Holding — bracket order active","var(--green)");
+    return;
+  }
+  eSig("Buying now…","var(--yellow)");
+  const p=await getPrice(E.sym);if(!p)return;
+  const q=Math.floor(E.usd/p);if(q<1){eLog(`$${E.usd} insufficient`,"r");return;}
+  const tp=(p*(1+E.tp/100)).toFixed(2),sl=(p*(1-E.sl/100)).toFixed(2);
+  const r=await api("POST","/v2/orders",{symbol:E.sym,qty:q,side:"buy",type:"market",time_in_force:"day",order_class:"bracket",take_profit:{limit_price:tp},stop_loss:{stop_price:sl}});
+  if(!r.ok){eLog("Bracket failed: "+(r.d.message||""),"r");return;}
+  E.qty=q;E.buy=p;
+  $("e-pos").textContent=`${q}×${E.sym} @ ${fmt(p)}`;
+  eSig("Holding — bracket active","var(--green)");
+  eLog(`BUY ${q}×${E.sym} @ ~${fmt(p)} | TP ${fmt(tp)} | SL ${fmt(sl)}`,"g");
+}
+
+// ── 3. DCA ─────────────────────────────────────────────────────────────────
+async function tickDCA(){
+  const E=G.E;
+  eSig("Buying now (DCA)…","var(--yellow)");
+  const p=await getPrice(E.sym);if(!p)return;
+  const q=Math.floor(E.usd/p);if(q<1){eLog(`$${E.usd} insufficient`,"r");return;}
+  const r=await api("POST","/v2/orders",{symbol:E.sym,qty:q,side:"buy",type:"market",time_in_force:"day"});
+  if(!r.ok){eLog("DCA failed: "+(r.d.message||""),"r");return;}
+  E.qty+=q;$("e-pos").textContent=`${E.qty}×${E.sym}`;
+  eSig(`Bought — total ${E.qty} shares`,"var(--green)");
+  eLog(`DCA BUY ${q}×${E.sym} @ ~${fmt(p)} (total ${E.qty} shares)`,"g");
+}
+
+// ── 4. Dip Buy ─────────────────────────────────────────────────────────────
+async function tickDip(){
+  const E=G.E;
+  if(E.qty>0){
+    if(await checkTrailFired())return;
+    const p=await getPrice(E.sym);if(p)updateHolding(p);
+    eSig("Holding — trailing stop active","var(--green)");
+    return;
+  }
+  const bars=await getBars(E.sym,E.dipLB);
+  if(bars.length<5){eLog("Not enough bars yet","y");return;}
+  const closes=bars.map(b=>b.c);
+  const high=Math.max(...closes);
+  const current=closes[closes.length-1];
+  const dropPct=((high-current)/high)*100;
+  eSig(`Watching for dip — down ${dropPct.toFixed(1)}% / need ${E.dipPct}%`,dropPct>=E.dipPct?"var(--green)":"var(--muted2)");
+  eLog(`${E.sym} high=${fmt(high)} now=${fmt(current)} drop=${dropPct.toFixed(2)}% (need ${E.dipPct}%)`);
+  if(dropPct>=E.dipPct){
+    eLog(`🎯 Dip triggered! ${dropPct.toFixed(2)}% drop from high ${fmt(high)}`,"g");
+    const{qty,fillPrice}=await doBuy(E.sym,E.usd);
+    E.qty=qty;E.buy=fillPrice;E.peak=fillPrice;
+    E.stopId=await attachTrailStop(E.sym,qty,E.trail);
+    eLog(`Trail stop set at ${fmt(fillPrice*(1-E.trail/100))}`,"g");
+  }
+}
+
+// ── 5. Breakout ────────────────────────────────────────────────────────────
+async function tickBreakout(){
+  const E=G.E;
+  if(E.qty>0){
+    if(await checkTrailFired())return;
+    const p=await getPrice(E.sym);if(p)updateHolding(p);
+    eSig("Holding — trailing stop active","var(--green)");
+    return;
+  }
+  const bars=await getBars(E.sym,E.boLB);
+  if(bars.length<5){eLog("Not enough bars yet","y");return;}
+  const closes=bars.map(b=>b.c);
+  const low=Math.min(...closes);
+  const current=closes[closes.length-1];
+  const risePct=((current-low)/low)*100;
+  eSig(`Watching for breakout — up ${risePct.toFixed(1)}% / need ${E.boPct}%`,risePct>=E.boPct?"var(--green)":"var(--muted2)");
+  eLog(`${E.sym} low=${fmt(low)} now=${fmt(current)} rise=${risePct.toFixed(2)}% (need ${E.boPct}%)`);
+  if(risePct>=E.boPct){
+    eLog(`🚀 Breakout triggered! ${risePct.toFixed(2)}% above low ${fmt(low)}`,"g");
+    const{qty,fillPrice}=await doBuy(E.sym,E.usd);
+    E.qty=qty;E.buy=fillPrice;E.peak=fillPrice;
+    E.stopId=await attachTrailStop(E.sym,qty,E.trail);
+    eLog(`Trail stop set at ${fmt(fillPrice*(1-E.trail/100))}`,"g");
+  }
+}
+
+// ── 6. RSI ─────────────────────────────────────────────────────────────────
+function calcRSI(closes,period){
+  if(closes.length<period+1)return null;
+  const recent=closes.slice(-period-1);
+  let gains=0,losses=0;
+  for(let i=1;i<recent.length;i++){
+    const d=recent[i]-recent[i-1];
+    if(d>0)gains+=d;else losses+=Math.abs(d);
+  }
+  const avgG=gains/period,avgL=losses/period;
+  if(avgL===0)return 100;
+  return 100-(100/(1+avgG/avgL));
+}
+
+async function tickRSI(){
+  const E=G.E;
+  const bars=await getBars(E.sym,E.rsiPeriod+10);
+  if(bars.length<E.rsiPeriod+1){eLog("Not enough bars for RSI","y");return;}
+  const closes=bars.map(b=>b.c);
+  const rsi=calcRSI(closes,E.rsiPeriod);
+  if(rsi===null){eLog("RSI calc failed","r");return;}
+
+  // Update RSI gauge
+  $("rsi-live").classList.remove("hidden");
+  $("rsi-val").textContent=rsi.toFixed(1);
+  $("rsi-val").style.color=rsi<E.rsiBuy?"var(--green)":rsi>E.rsiSell?"var(--red)":"var(--text)";
+  $("rsi-marker").style.left=(rsi)+"%";
+
+  if(await checkTrailFired())return;
+  const p=closes[closes.length-1];
+
+  if(!E.qty){
+    eSig(`RSI ${rsi.toFixed(1)} — waiting for < ${E.rsiBuy}`,rsi<E.rsiBuy?"var(--green)":"var(--muted2)");
+    eLog(`RSI=${rsi.toFixed(1)} | waiting to buy below ${E.rsiBuy}`);
+    if(rsi<E.rsiBuy){
+      eLog(`📊 RSI oversold (${rsi.toFixed(1)}) — BUYING`,"g");
+      const{qty,fillPrice}=await doBuy(E.sym,E.usd);
+      E.qty=qty;E.buy=fillPrice;E.peak=fillPrice;
+      E.stopId=await attachTrailStop(E.sym,qty,E.trail);
+    }
+  }else{
+    eSig(`RSI ${rsi.toFixed(1)} — holding (sell above ${E.rsiSell})`,rsi>E.rsiSell?"var(--red)":"var(--green)");
+    eLog(`RSI=${rsi.toFixed(1)} | holding ${E.qty}×${E.sym}`);
+    updateHolding(p);
+    if(rsi>E.rsiSell){
+      eLog(`📊 RSI overbought (${rsi.toFixed(1)}) — SELLING`,"r");
+      if(E.stopId)await api("DELETE","/v2/orders/"+E.stopId);
+      const r=await api("POST","/v2/orders",{symbol:E.sym,qty:E.qty,side:"sell",type:"market",time_in_force:"day"});
+      if(r.ok){const pl=(p-E.buy)*E.qty;eLog(`SOLD ${E.qty}×${E.sym} @ ~${fmt(p)} | P&L ${pl>=0?"+":""}${fmt(pl)}`,pl>=0?"g":"r");}
+      E.qty=0;E.buy=0;E.peak=0;E.stopId=null;
+      $("e-pos").textContent="None";$("e-stop").textContent="—";$("e-pbar").classList.add("hidden");
+    }
+  }
+}
+
+// ── 7. MA Cross ────────────────────────────────────────────────────────────
+function calcMA(closes,period){
+  if(closes.length<period)return null;
+  const slice=closes.slice(-period);
+  return slice.reduce((a,b)=>a+b,0)/period;
+}
+
+async function tickMA(){
+  const E=G.E;
+  const need=Math.max(E.maFast,E.maSlow)+5;
+  const bars=await getBars(E.sym,need);
+  if(bars.length<E.maSlow){eLog("Not enough bars for MA","y");return;}
+  const closes=bars.map(b=>b.c);
+  const fastMA=calcMA(closes,E.maFast);
+  const slowMA=calcMA(closes,E.maSlow);
+  if(!fastMA||!slowMA)return;
+
+  // Update MA display
+  $("ma-live").classList.remove("hidden");
+  $("ma-fast-val").textContent=fmt(fastMA);$("ma-fast-val").style.color=fastMA>slowMA?"var(--green)":"var(--red)";
+  $("ma-slow-val").textContent=fmt(slowMA);
+  const cross=fastMA>slowMA?"Golden Cross ↑":"Death Cross ↓";
+  $("ma-signal").textContent=cross;$("ma-signal").style.color=fastMA>slowMA?"var(--green)":"var(--red)";
+
+  if(await checkTrailFired())return;
+
+  const prevFast=E.prevFastMA,prevSlow=E.prevSlowMA;
+  const goldenCross=prevFast!==null&&prevSlow!==null&&prevFast<=prevSlow&&fastMA>slowMA;
+  const deathCross=prevFast!==null&&prevSlow!==null&&prevFast>=prevSlow&&fastMA<slowMA;
+  E.prevFastMA=fastMA;E.prevSlowMA=slowMA;
+
+  const p=closes[closes.length-1];
+
+  if(!E.qty){
+    eSig(`MA${E.maFast}=${fmt(fastMA)} MA${E.maSlow}=${fmt(slowMA)} — waiting for golden cross`,goldenCross?"var(--green)":"var(--muted2)");
+    eLog(`MA${E.maFast}=${fmt(fastMA)} MA${E.maSlow}=${fmt(slowMA)} — ${cross}`);
+    if(goldenCross){
+      eLog(`〰️ Golden Cross! MA${E.maFast} crossed above MA${E.maSlow} — BUYING`,"g");
+      const{qty,fillPrice}=await doBuy(E.sym,E.usd);
+      E.qty=qty;E.buy=fillPrice;E.peak=fillPrice;
+      E.stopId=await attachTrailStop(E.sym,qty,E.trail);
+    }
+  }else{
+    eSig(`Holding — MA${E.maFast}=${fmt(fastMA)} MA${E.maSlow}=${fmt(slowMA)}`,fastMA>slowMA?"var(--green)":"var(--yellow)");
+    updateHolding(p);
+    if(deathCross){
+      eLog(`〰️ Death Cross! MA${E.maFast} crossed below MA${E.maSlow} — SELLING`,"r");
+      if(E.stopId)await api("DELETE","/v2/orders/"+E.stopId);
+      const r=await api("POST","/v2/orders",{symbol:E.sym,qty:E.qty,side:"sell",type:"market",time_in_force:"day"});
+      if(r.ok){const pl=(p-E.buy)*E.qty;eLog(`SOLD ${E.qty}×${E.sym} @ ~${fmt(p)} | P&L ${pl>=0?"+":""}${fmt(pl)}`,pl>=0?"g":"r");}
+      E.qty=0;E.buy=0;E.peak=0;E.stopId=null;
+      $("e-pos").textContent="None";$("e-stop").textContent="—";$("e-pbar").classList.add("hidden");
+    }
+  }
 }
 </script>
 </body>
